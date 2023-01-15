@@ -16,9 +16,8 @@
 
  // Imports
  import java.util.Arrays;
- import java.util.Collections;
- import java.util.Comparator;
  import java.util.Random;
+ import java.util.Scanner;
 
  /**
   * The SnakeAndLadder Class contains the relevant information pertaining the snake and ladder game.
@@ -60,7 +59,7 @@ public class SnakeAndLadder {
         if (playerCount > 2) {
             // Notify user of playerCount Error
             System.out.printf("Initialization was attempted for %d member of players; however, this is only" 
-                            + " expected for an extended version the game. Value will be set to 2%n", playerCount);
+                            + " expected for an extended version of the game. Value will be set to 2%n", playerCount);
         } else if (playerCount < 2) {
             // Notify user of playerCount Error
             System.out.println("Error: Cannot execute the game with less than 2 players! Will exit");
@@ -142,6 +141,14 @@ public class SnakeAndLadder {
      * 
      */
     private void updateBoard() {
+        // Clear the board
+        this.board = new String[this.boardRows][this.boardColumns];
+        for (int row=0; row < this.board.length; row++) {
+            for (int col=0; col < this.board[0].length; col++) {
+                this.board[row][col] = "     ";
+            }
+        }
+
         // Populate board with respective icons
         // Snakes
         for (int i=0; i < this.snakePos.length; i++) {
@@ -173,7 +180,10 @@ public class SnakeAndLadder {
 
         // Start and End
         this.board[9][0] = TEXT_BLUE + "!=" + TEXT_RESET + this.board[9][0].substring(2,this.board[9][0].length());
-        this.board[0][0] = TEXT_BLUE + "#=" + TEXT_RESET + this.board[0][0].substring(2,this.board[0][0].length());
+        // Check to see if a player at the end. To avoid a visual glitch, the end symbol is not diaplyed
+        if (!(this.board[0][0].subSequence(5, 6).equals("P"))) {
+            this.board[0][0] = TEXT_BLUE + "#=" + TEXT_RESET + this.board[0][0].substring(2,this.board[0][0].length());
+        }
     }
 
     /**
@@ -184,7 +194,7 @@ public class SnakeAndLadder {
     private void displayBoard() {
         // Head
         System.out.printf("---------------------------------------------------------------------------------\n"
-                        + "|                   Game Board                      Turn: %d                     |\n"
+                        + "|                   Game Board                     Turn: %d                     |\n"
                         + "---------------------------------------------------------------------------------\n"
                         + "|                                 <-----                                        |\n", this.turn);
         // Body
@@ -215,35 +225,83 @@ public class SnakeAndLadder {
 
     private void generateRollOrder() {
         int rollCount = 0;  // Keep track of how many rolls it takes to determin roll order
+        int pos = 0;    // Position of the current sort
+        Player[] unorderedPlayers = Arrays.copyOf(this.playerList, this.playerList.length);;  // Contains the player that need to be ordered
+        Player[] orderedPlayers = new Player[this.playerList.length]; // List of players who have been ordered. Temporary list that will be copied into this.playerList
         // Output start message
         System.out.println("Now deciding which player will start playing:");
 
-        // Roll the dice for each player
-        for (Player player: this.playerList) {
-            int roll = this.flipDice();
-            player.setPreviousRoll(roll);
-        }
+        do {
+            rollCount++;
+            
+            // Roll the dice for each player who is unordered
+            for (Player player: unorderedPlayers) {
+                int roll = this.flipDice();
+                player.setPreviousRoll(roll);
+                // Display the roll of each player
+                System.out.printf("Player %d rolled a %d\n",player.getPlayerNum(), player.getPreviousRoll());
+            }
 
-        for (Player player: this.playerList) {
-            System.out.printf("PlayerNumber: %d, Previous Roll: %d\n",player.getPlayerNum(), player.getPreviousRoll());
-        }
-
-        // Sort the playerList based on their previous rolls
-        for (int i=0; i < this.playerList.length; i++) {
-            for (int j=i+1; j < this.playerList.length; j++) {
-                if (this.playerList[i].getPreviousRoll() < this.playerList[j].getPreviousRoll()) {
-                    Player temp = this.playerList[i];
-                    this.playerList[i] = this.playerList[j];
-                    this.playerList[j] = temp;
+            // Sort the unorderedPlayers based on their previous rolls
+            for (int i=0; i < unorderedPlayers.length; i++) {
+                for (int j=i+1; j < unorderedPlayers.length; j++) {
+                    if (unorderedPlayers[i].getPreviousRoll() < unorderedPlayers[j].getPreviousRoll()) {
+                        Player temp = unorderedPlayers[i];
+                        unorderedPlayers[i] = unorderedPlayers[j];
+                        unorderedPlayers[j] = temp;
+                    }
                 }
             }
+
+            // Check for duplicate rolls. Set players who have no ducplicates to ordered
+            for (int i=0; i < unorderedPlayers.length; i++) {
+                // If we are evaluating the last element and the previous element has been ordered, set the last element to ordered=true 
+                if (i+1 == unorderedPlayers.length && unorderedPlayers[i-1].getOrdered()) {
+                    unorderedPlayers[i].setOrdered(true);
+                }
+                for (int j=i+1; j < unorderedPlayers.length; j++) {
+                    if (unorderedPlayers[i].getPreviousRoll() == unorderedPlayers[j].getPreviousRoll()) {
+                        // Display to user that there was a tie
+                        System.out.printf("A tie was achieved between player%d and player%d. Rerolling for those players.\n",unorderedPlayers[i].getPlayerNum(), unorderedPlayers[j].getPlayerNum());
+                        continue;
+                    }
+                    unorderedPlayers[i].setOrdered(true);
+                }
+            }
+
+            // Add players who are ordered to orderedPlayers in order
+            for (Player player: unorderedPlayers) {
+                if (player.getOrdered()) {
+                    orderedPlayers[pos] = player;
+                    pos++;
+                }
+            }
+
+            // Remove players who are ordered from unorderedPlayers
+            Player[] temp = new Player[0];
+            for (int i=0; i < unorderedPlayers.length; i++) {
+                if (unorderedPlayers[i].getOrdered()) {
+                    continue;
+                }
+                temp = Arrays.copyOf(temp, temp.length + 1);
+                temp[temp.length - 1] = unorderedPlayers[i];
+            }
+            unorderedPlayers = temp.clone();
+        } while (unorderedPlayers.length != 0);
+
+        // Copy the ordered list to this.playerList to be used elsewhere
+        this.playerList = orderedPlayers;
+
+        // Display the roll order to the user
+        System.out.print("Reached final decision on playing order: ");
+        for (int i=0; i < this.playerList.length; i++) {
+            if (i == this.playerList.length-1) {
+                System.out.printf("Player%d. ", this.playerList[i].getPlayerNum());
+                continue;
+            }
+            System.out.printf("Player%d then ", this.playerList[i].getPlayerNum());
         }
-
-        for (Player player: this.playerList) {
-            System.out.printf("PlayerNumber: %d, Previous Roll: %d\n",player.getPlayerNum(), player.getPreviousRoll());
-        }
-
-
+        System.out.printf("It took %d attemps before a decision could be made.\n",rollCount);
     }
 
     /**
@@ -251,23 +309,42 @@ public class SnakeAndLadder {
      * 
      */
     private void updatePosition() {
+
         this.turn++;    // Increment the turn timer
 
         // Roll for each player and update their positions
         for (Player player: this.playerList) {
-            player.setPos(player.getPos() + this.flipDice());
+            int roll = this.flipDice();
+            player.setPos(player.getPos() + roll);
+            // Display the current player's roll
+            System.out.printf("Player%d rolled a %d; ", player.getPlayerNum(), roll);
+            
+            // Check to see if a player has gone over the 100th tile and update their position.
+            if (player.getPos() > 100) {
+                player.setPos(100 - (player.getPos() % 100));
+            }
+
             // Check to see if the player is on the head of a snake and update their position
-            for (int[] snake: this.snakePos) {
-                if (player.getPos() == snake[0]) {
-                    player.setPos(snake[1]);
+            for (int i=0; i < this.snakePos.length; i++) {
+                if (player.getPos() == this.snakePos[i][0]) {
+                    // Display to user that they are on a snake
+                    System.out.printf("Player%d landed on the head of snake %d, ",player.getPlayerNum(),i+1);
+                    player.setPos(this.snakePos[i][1]);
                 }
             }
+
             // Check to see if player is at the bottom of a ladder and update their position
-            for (int[] ladder: this.ladderPos) {
-                if (player.getPos() == ladder[0]) {
-                    player.setPos(ladder[1]);
+            for (int i=0; i < this.ladderPos.length; i++) {
+                if (player.getPos() == this.ladderPos[i][0]) {
+                    // Display to user that they are on a ladder
+                    System.out.printf("Player%d landed at the bottom of ladder %d, ",player.getPlayerNum(),i+1);
+                    player.setPos(this.ladderPos[i][1]);
                 }
             }
+            
+            // Display the current player's updated position
+            System.out.printf("Now in square %d\n",player.getPos());
+
             // Check to see if a player is on top of another player. If true, send the player that was on the tile first to position 0
             for (Player otherPlayer: this.playerList) {
                 // Skip the player that is moving
@@ -275,13 +352,31 @@ public class SnakeAndLadder {
                     continue;
                 } else {
                     if (player.getPos() == otherPlayer.getPos()) {
+                        // Display to the user that a player landed on another
+                        System.out.printf("Player%d landed on player%d. Player%d sent back to the start\n",player.getPlayerNum(),otherPlayer.getPlayerNum(),otherPlayer.getPlayerNum());
                         otherPlayer.setPos(0);
                     }
                 }    
             }
-            
-        }
 
+            // Check to see if a player has won the game
+            if (player.getPos() == 100) {
+                // A player has won. Display this to the user and end the game
+                System.out.printf("Player%d has reached tile 100 and has won the game!\n", player.getPlayerNum());
+                this.gameStatus = false;
+                break;
+            }
+        }
+    }
+
+    /**
+     * Waits for the user to enter any key.
+     * When a user enters a key, the next turn will render
+     */
+    private void nextTurn() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Press any key for the next turn...");
+        scan.nextLine();
     }
 
     /**
@@ -289,11 +384,12 @@ public class SnakeAndLadder {
      * Allows the players to start playing the game
      */
     public void play() {
+        this.generateRollOrder();
         do {
+            this.nextTurn();
+            this.updatePosition();
             this.updateBoard();
             this.displayBoard();
-            this.generateRollOrder();
-            this.gameStatus = false;
         } while (this.gameStatus);
     }
 
