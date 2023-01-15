@@ -205,6 +205,7 @@ public class SnakeAndLadder {
 
     /**
      * Simulates a virtual dice roll using random.
+     * 
      * @return random integer value between 1 and 6 
      */
     private int flipDice() {
@@ -223,9 +224,24 @@ public class SnakeAndLadder {
             player.setPreviousRoll(roll);
         }
 
-        
+        for (Player player: this.playerList) {
+            System.out.printf("PlayerNumber: %d, Previous Roll: %d\n",player.getPlayerNum(), player.getPreviousRoll());
+        }
 
-        System.out.println(this.playerList);
+        // Sort the playerList based on their previous rolls
+        for (int i=0; i < this.playerList.length; i++) {
+            for (int j=i+1; j < this.playerList.length; j++) {
+                if (this.playerList[i].getPreviousRoll() < this.playerList[j].getPreviousRoll()) {
+                    Player temp = this.playerList[i];
+                    this.playerList[i] = this.playerList[j];
+                    this.playerList[j] = temp;
+                }
+            }
+        }
+
+        for (Player player: this.playerList) {
+            System.out.printf("PlayerNumber: %d, Previous Roll: %d\n",player.getPlayerNum(), player.getPreviousRoll());
+        }
 
 
     }
@@ -233,7 +249,6 @@ public class SnakeAndLadder {
     /**
      * Updates the position of the player objects by a certain dice roll amount.
      * 
-     * @param player
      */
     private void updatePosition() {
         this.turn++;    // Increment the turn timer
