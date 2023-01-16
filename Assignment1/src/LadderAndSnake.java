@@ -5,13 +5,8 @@
  // COMP 249
  // Due Date: Febuary 3, 2023
  // 
- // - In a comment, give a general explanation of what your program does. As the programming questions get 
- //   more complex, the explanations will get lengthier.
- // - Include comments in your program describing the main steps in your program.
- // - Display a welcome message which includes your name(s).
- // - Display clear prompts for users when you are expecting the user to enter data from the keyboard.
- // - All output should be displayed with clear messages and in an easy to read format.
- // - End your program with a closing message so that the user knows that the program has terminated. */
+ // This program creates a game of snakes and ladders. It perform the calculations needed to keep track of each player
+ // and to display those results to the console.
  // -----------------------------------------------------
 
  // Imports
@@ -20,7 +15,7 @@
  import java.util.Scanner;
 
  /**
-  * The SnakeAndLadder Class contains the relevant information pertaining the snake and ladder game.
+  * The LadderAndSnake Class contains the relevant information pertaining the snake and ladder game.
   * This includes: The game board, gameStatus, current turn
   * It also handles all of the game logic
   *  
@@ -28,14 +23,13 @@
   * @version 1.0
   * 
   */
-public class SnakeAndLadder {
+public class LadderAndSnake {
     // Private Variables
     private int playerCount;
     private Player[] playerList;
     private int boardRows = 10;
     private int boardColumns = 10;
     private String[][] board;
-    private int[][] boardPos;
     private boolean gameStatus;     // True: Game is running, False: Game has concluded
     private int turn;
     private int[][] snakePos = {{16,6},{48,30},{64,60},{79,19},{93,68},{95,24},{97,76},{98,78}};    // Stores position of snakes on board. {Head,Tail}
@@ -53,9 +47,10 @@ public class SnakeAndLadder {
     /**
      * Paramater constructor for SnakeAndLadder class
      * 
-     * @param playerCount
+     * @param playerCount Amount of players to play the game.
      */
-    public SnakeAndLadder(int playerCount) {
+    public LadderAndSnake(int playerCount) {
+        // Check if the entered playerCount is valid or not
         if (playerCount > 2) {
             // Notify user of playerCount Error
             System.out.printf("Initialization was attempted for %d member of players; however, this is only" 
@@ -69,7 +64,7 @@ public class SnakeAndLadder {
         // Initialize playerCount to 2. For our purposes, it will always be 2
         this.playerCount = 2;
         
-        // Create 2 Player objects and add them to playerList
+        // Create 2 Player objects and add them to this.playerList
         this.playerList = new Player[this.playerCount];
         for (int i=0; i < this.playerCount; i++) {
             this.playerList[i] = new Player(i+1); 
@@ -82,22 +77,7 @@ public class SnakeAndLadder {
                 this.board[row][col] = "     ";
             }
         }
-        
-        /* 
-        // Initialize board positions 
-        //Formula: If row is even: (row * 10) + col | If row is odd: (row * 10) + (11 - col)
-        this.boardPos = new int[this.boardRows][this.boardColumns];
-        for (int row=0; row < this.board.length; row++) {
-            for (int col=0; col < this.board[0].length; col++) {
-                if (row % 2 == 0) {
-                    this.boardPos[row][col] = (row * 10) + (col + 1);
-                } else {
-                    this.boardPos[row][col] = (row * 10) + (10 - col);
-                }
-            }
-        }
-        */
-
+    
         // Set gameStatus to true
         this.gameStatus = true;
     }
@@ -107,7 +87,7 @@ public class SnakeAndLadder {
      * Row zero is located at the bottom of the board
      * Ex: row-0 col-0 corresponds to the 1 position on the board
      * 
-     * @param pos
+     * @param pos Position
      * @return Integer array containing the row and column values
      */
     private int[] calCoordinate(int pos) {
@@ -189,7 +169,6 @@ public class SnakeAndLadder {
     /**
      * Displays the state of the game board to the console
      * 
-     * @return Print a representation of the 2D array board to the console
      */
     private void displayBoard() {
         // Head

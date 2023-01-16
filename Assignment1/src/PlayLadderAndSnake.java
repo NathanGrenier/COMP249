@@ -38,7 +38,7 @@ public class PlayLadderAndSnake {
         } while(playerCount == 0);
 
         // Create SnakeAndLadder game with the specified playerCount
-        SnakeAndLadder game = new SnakeAndLadder(playerCount);
+        LadderAndSnake game = new LadderAndSnake(playerCount);
         
         // Play the game
         game.play();

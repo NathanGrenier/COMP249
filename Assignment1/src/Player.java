@@ -4,6 +4,8 @@
  // Written by: Nathan Grenier, 40250986
  // COMP 249
  // Due Date: Febuary 3, 2023
+ //
+ // This class generates a player which is used by the SnakeAndLadder class.
  // -----------------------------------------------------
 
  /**
@@ -11,6 +13,7 @@
  * 
  * @author Nathan Grenier
  * @version 1.0
+ * @see LadderAndSnake
  * 
  */
 public class Player {
@@ -24,7 +27,7 @@ public class Player {
      * Player constructor.
      * Assign the playerNumber by passing it as a paramater
      * 
-     * @param playerNum
+     * @param playerNum Number of the player. Used as an identifier
      */
     public Player(int playerNum) {
         this.pos = 0;
@@ -85,7 +88,7 @@ public class Player {
     /**
      * Set the player's position.
      * 
-     * @param pos
+     * @param pos Position of player.
      */
     public void setPos(int pos) {
         this.pos = pos;
@@ -94,7 +97,7 @@ public class Player {
     /**
      * Set the player's play order.
      * 
-     * @param playOrder
+     * @param playOrder Player's game order.
      */
     public void setPlayOrder(int playOrder) {
         this.playOrder = playOrder;
@@ -103,7 +106,7 @@ public class Player {
     /**
      * Set the player's previous roll.
      * 
-     * @param previousRoll
+     * @param previousRoll Previous roll amount.
      */
     public void setPreviousRoll(int previousRoll) {
         this.previousRoll = previousRoll;
@@ -112,7 +115,7 @@ public class Player {
     /**
      * Set if the player is ordered or not.
      * 
-     * @param ordered
+     * @param ordered Boolean value indicating if the player has been ordered or not.
      */
     public void setOrdered(boolean ordered) {
         this.ordered = ordered;
