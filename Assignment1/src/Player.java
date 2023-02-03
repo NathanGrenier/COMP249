@@ -1,14 +1,14 @@
- // -----------------------------------------------------
- // Assignment 1
- // Question: Part 1
- // Written by: Nathan Grenier, 40250986
- // COMP 249
- // Due Date: Febuary 3, 2023
- //
- // This class generates a player which is used by the SnakeAndLadder class.
- // -----------------------------------------------------
+// -----------------------------------------------------
+// Assignment 1
+// Question: Part 1
+// Written by: Nathan Grenier, 40250986
+// COMP 249
+// Due Date: Febuary 3, 2023
+//
+// This class generates a player which is used by the SnakeAndLadder class.
+// -----------------------------------------------------
 
- /**
+/**
  * The Player Class represents a player in the snake and ladder game.
  * 
  * @author Nathan Grenier
@@ -21,7 +21,6 @@ public class Player {
     private int playerNum;
     private int previousRoll;
     private int playOrder;
-    private boolean ordered;
 
     /**
      * Player constructor.
@@ -34,7 +33,6 @@ public class Player {
         this.playerNum = playerNum;
         this.previousRoll = 0;
         this.playOrder = 0;
-        this.ordered = false;
     }
 
     // Getters
@@ -74,16 +72,6 @@ public class Player {
         return this.previousRoll;
     }
 
-    /**
-     * See if the player has been ordered.
-     * The order corresponds to the roll order
-     * 
-     * @return A boolean representing if the player has had their roll order determined.
-     */
-    public boolean getOrdered() {
-        return this.ordered;
-    }
-
     // Setters
     /**
      * Set the player's position.
@@ -110,14 +98,5 @@ public class Player {
      */
     public void setPreviousRoll(int previousRoll) {
         this.previousRoll = previousRoll;
-    }
-
-    /**
-     * Set if the player is ordered or not.
-     * 
-     * @param ordered Boolean value indicating if the player has been ordered or not.
-     */
-    public void setOrdered(boolean ordered) {
-        this.ordered = ordered;
     }
 }
