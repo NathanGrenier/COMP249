@@ -1,0 +1,13 @@
+@startuml Hello world
+scale 2
+class WheeledTransportation {
+    +something: int
+}
+
+class Monowheel {
+    +something: int
+}
+
+WheeledTransportation --|> Monowheel
+
+@enduml
