@@ -1,13 +1,64 @@
 @startuml Hello world
-scale 2
-class WheeledTransportation {
-    +something: int
+scale 1
+
+package package1 {
+    class WheeledTransportation {
+        #wheelCount : int
+        #maxSpeed : double
+    }
 }
 
-class Monowheel {
-    +something: int
+package package2 {
+    class Tram {
+        -yearOfCreation : int
+    }
+    
+    class Train {
+        #vehicleCount : int
+        #startStation : String
+        #endStation : String
+    }
 }
 
-WheeledTransportation --|> Monowheel
+package package3 {
+    class Metro {
+        #stopCount : int
+    }
+}
 
+package package4 {
+    class Monowheel {
+        -maxWeight : double
+    }
+    
+
+}
+
+package package5 {
+    class Ferry {
+        -maxSpeed : double
+        -maxLoad : double
+    }
+}
+
+package package6 {
+    class Aircraft {
+        #price : double
+        #maxElevation : double
+    }
+
+    class WW2Plane {
+        -twinEngine : boolean
+    }
+}
+
+
+WheeledTransportation <|-- Train
+Metro <|-- Tram
+
+Train <|-- Metro
+
+WheeledTransportation <|-- Monowheel
+
+Aircraft <|-- WW2Plane
 @enduml
