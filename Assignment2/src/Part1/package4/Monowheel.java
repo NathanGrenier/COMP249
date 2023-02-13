@@ -23,4 +23,23 @@ public class Monowheel extends WheeledTransportation {
     public String toString() {
         return "Monowheel{" + "maxWeight=" + this.maxWeight + "} " + super.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (super.equals(obj)) {
+            Monowheel otherObj = (Monowheel) obj;
+            return maxWeight == otherObj.maxWeight;
+        }
+        return false;
+    }
+
+    // Getters
+    public double getMaxWeight() {
+        return this.maxWeight;
+    }
+
+    // Setters
+    public void setMaxWeight(double maxWeight) {
+        this.maxWeight = maxWeight;
+    }
 }

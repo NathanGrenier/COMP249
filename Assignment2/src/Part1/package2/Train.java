@@ -31,4 +31,40 @@ public class Train extends WheeledTransportation {
                 + "', endStation='"
                 + this.endStation + "'} " + super.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (super.equals(obj)) {
+            Train otherObj = (Train) obj;
+            return (vehicleCount == otherObj.vehicleCount && startStation.equals(otherObj.startStation)
+                    && endStation.equals(endStation));
+        }
+        return false;
+    }
+
+    // Getters
+    public int getVehicleCount() {
+        return this.vehicleCount;
+    }
+
+    public String getStartStation() {
+        return this.startStation;
+    }
+
+    public String getEndStation() {
+        return this.endStation;
+    }
+
+    // Setters
+    public void setVehicleCount(int vehicleCount) {
+        this.vehicleCount = vehicleCount;
+    }
+
+    public void setStartStation(String startStation) {
+        this.startStation = startStation;
+    }
+
+    public void setEndStation(String endStation) {
+        this.endStation = endStation;
+    }
 }

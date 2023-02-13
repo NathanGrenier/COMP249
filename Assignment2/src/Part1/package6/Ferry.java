@@ -22,4 +22,34 @@ public class Ferry {
     public String toString() {
         return "Ferry{" + "maxSpeed=" + this.maxSpeed + ", maxLoad=" + this.maxLoad + "} ";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (this.getClass() != obj.getClass()) {
+            return false;
+        } else {
+            Ferry otherObj = (Ferry) obj;
+            return maxSpeed == otherObj.maxSpeed && maxLoad == otherObj.maxLoad;
+        }
+    }
+
+    // Getters
+    public double getMaxSpeed() {
+        return maxSpeed;
+    }
+
+    public double getMaxLoad() {
+        return maxLoad;
+    }
+
+    // Setters
+    public void setMaxSpeed(double maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public void setMaxLoad(double maxLoad) {
+        this.maxLoad = maxLoad;
+    }
 }

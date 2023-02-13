@@ -53,6 +53,15 @@ package package6 {
 }
 
 
+class Train extends WheeledTransportation
+class Metro extends Train
+class Tram extends Metro
+class Monowheel extends WheeledTransportation
+class WW2Plane extends Aircraft
+
+/'
+Arrow implementation of inheritance
+
 WheeledTransportation <|-- Train
 Metro <|-- Tram
 
@@ -61,4 +70,5 @@ Train <|-- Metro
 WheeledTransportation <|-- Monowheel
 
 Aircraft <|-- WW2Plane
+'/
 @enduml

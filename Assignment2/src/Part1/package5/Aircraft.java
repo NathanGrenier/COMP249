@@ -22,4 +22,40 @@ public class Aircraft {
     public String toString() {
         return "Aircraft{" + "price=" + this.price + ", maxElevation=" + this.maxElavation + "} ";
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        } else if (this.getClass() == obj.getClass()) {
+            return false;
+        } else {
+            Aircraft otherObj = (Aircraft) obj;
+            return price == otherObj.price && maxElavation == otherObj.maxElavation;
+        }
+    }
+
+    @Override
+    public Aircraft clone() {
+        return new Aircraft(this);
+    }
+
+    // Getters
+    public double getPrice() {
+        return price;
+    }
+
+    public double getMaxElavation() {
+        return maxElavation;
+    }
+
+    // Setters
+    public void setMaxElavation(double maxElavation) {
+        this.maxElavation = maxElavation;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
+
 }

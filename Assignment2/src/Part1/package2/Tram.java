@@ -25,4 +25,23 @@ public class Tram extends Metro {
     public String toString() {
         return "Tram{" + "yearOfCreation=" + this.yearOfCreation + "} " + super.toString();
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (super.equals(obj)) {
+            Tram otherObj = (Tram) obj;
+            return yearOfCreation == otherObj.yearOfCreation;
+        }
+        return false;
+    }
+
+    // Getters
+    public int getYearOfCreation() {
+        return this.yearOfCreation;
+    }
+
+    // Setters
+    public void setYearOfCreation(int yearOfCreation) {
+        this.yearOfCreation = yearOfCreation;
+    }
 }
