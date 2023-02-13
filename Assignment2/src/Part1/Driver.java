@@ -17,12 +17,26 @@ public class Driver {
             if (obj instanceof Aircraft) {
                 Aircraft aircraft = (Aircraft) obj;
 
+                /*
+                 * Different way of implementing the deep copy (Add 1 object at a time)
+                 * Aircraft[] temp = new Aircraft[aircraftArr.length + 1];
+                 * for (int i = 0; i < aircraftArr.length; i++) {
+                 * temp[i] = aircraftArr[i].clone();
+                 * }
+                 * temp[temp.length - 1] = aircraft.clone();
+                 * 
+                 * aircraftArr = new Aircraft[temp.length];
+                 * for (int i = 0; i < temp.length; i++) {
+                 * aircraftArr[i] = temp[i].clone();
+                 * }
+                 */
+
                 Aircraft[] temp = aircraftArr.clone();
                 aircraftArr = new Aircraft[temp.length + 1];
                 for (int i = 0; i < temp.length; i++) {
-                    aircraftArr[i] = temp[i];
+                    aircraftArr[i] = temp[i].clone();
                 }
-                aircraftArr[aircraftArr.length - 1] = aircraft;
+                aircraftArr[aircraftArr.length - 1] = aircraft.clone();
             }
         }
 
@@ -32,7 +46,8 @@ public class Driver {
             return;
         }
 
-        Aircraft leastExpensive = aircraftArr[0];
+        Aircraft leastExpensive = aircraftArr[0]; // These values could be cloned, but they will be deleted once out of
+                                                  // scope.
         Aircraft mostExpensive = aircraftArr[0];
         // Loop over Aircraft objects and find the least and most expensive ones
         for (Aircraft aircraft : aircraftArr) {
