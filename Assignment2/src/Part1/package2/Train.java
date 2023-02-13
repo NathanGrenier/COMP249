@@ -2,6 +2,8 @@ package Part1.package2;
 
 import Part1.package1.WheeledTransportation;
 
+// TODO Not sure if the clone method should be overwritten for each class
+
 public class Train extends WheeledTransportation {
     protected int vehicleCount;
     protected String startStation;
