@@ -36,6 +36,11 @@ public class Metro extends Train {
         return false;
     }
 
+    @Override
+    public Metro clone() {
+        return new Metro(this);
+    }
+
     // Getters
     public int getStopCount() {
         return this.stopCount;

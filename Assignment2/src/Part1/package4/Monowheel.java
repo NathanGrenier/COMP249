@@ -33,6 +33,11 @@ public class Monowheel extends WheeledTransportation {
         return false;
     }
 
+    @Override
+    public Monowheel clone() {
+        return new Monowheel(this);
+    }
+
     // Getters
     public double getMaxWeight() {
         return this.maxWeight;

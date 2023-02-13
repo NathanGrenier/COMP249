@@ -35,6 +35,11 @@ public class Tram extends Metro {
         return false;
     }
 
+    @Override
+    public Tram clone() {
+        return new Tram(this);
+    }
+
     // Getters
     public int getYearOfCreation() {
         return this.yearOfCreation;

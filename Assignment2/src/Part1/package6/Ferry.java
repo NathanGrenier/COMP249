@@ -35,6 +35,11 @@ public class Ferry {
         }
     }
 
+    @Override
+    public Ferry clone() {
+        return new Ferry(this);
+    }
+
     // Getters
     public double getMaxSpeed() {
         return maxSpeed;

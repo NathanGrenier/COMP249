@@ -2,8 +2,6 @@ package Part1.package2;
 
 import Part1.package1.WheeledTransportation;
 
-// TODO Not sure if the clone method should be overwritten for each class
-
 public class Train extends WheeledTransportation {
     protected int vehicleCount;
     protected String startStation;
@@ -42,6 +40,11 @@ public class Train extends WheeledTransportation {
                     && endStation.equals(endStation));
         }
         return false;
+    }
+
+    @Override
+    public Train clone() {
+        return new Train(this);
     }
 
     // Getters
