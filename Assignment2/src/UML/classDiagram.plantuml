@@ -5,6 +5,9 @@ package package1 {
     class WheeledTransportation {
         #wheelCount : int
         #maxSpeed : double
+        +toString()
+        +equals()
+        +copy()
     }
 }
 
