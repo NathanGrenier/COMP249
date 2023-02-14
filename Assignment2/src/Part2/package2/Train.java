@@ -1,6 +1,6 @@
 package Part2.package2;
 
-import Part1.package1.WheeledTransportation;
+import Part2.package1.WheeledTransportation;
 
 public class Train extends WheeledTransportation {
     protected int vehicleCount;
@@ -42,6 +42,7 @@ public class Train extends WheeledTransportation {
         return false;
     }
 
+    @Override
     public Train makeCopy() {
         return new Train(this);
     }

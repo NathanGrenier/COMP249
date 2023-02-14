@@ -1,6 +1,8 @@
 package Part2.package6;
 
-public class Ferry {
+import Part2.Copyable;
+
+public class Ferry implements Copyable {
     private double maxSpeed;
     private double maxLoad;
 
@@ -35,6 +37,7 @@ public class Ferry {
         }
     }
 
+    @Override
     public Ferry makeCopy() {
         return new Ferry(this);
     }

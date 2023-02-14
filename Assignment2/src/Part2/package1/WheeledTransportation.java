@@ -1,6 +1,8 @@
 package Part2.package1;
 
-public class WheeledTransportation {
+import Part2.Copyable;
+
+public class WheeledTransportation implements Copyable {
     protected int wheelCount;
     protected double maxSpeed;
 
@@ -35,6 +37,7 @@ public class WheeledTransportation {
         }
     }
 
+    @Override
     public WheeledTransportation makeCopy() {
         return new WheeledTransportation(this);
     }

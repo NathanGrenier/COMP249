@@ -1,6 +1,8 @@
 package Part2.package5;
 
-public class Aircraft {
+import Part2.Copyable;
+
+public class Aircraft implements Copyable {
     protected double price;
     protected double maxElavation;
 
@@ -35,6 +37,7 @@ public class Aircraft {
         }
     }
 
+    @Override
     public Aircraft makeCopy() {
         return new Aircraft(this);
     }

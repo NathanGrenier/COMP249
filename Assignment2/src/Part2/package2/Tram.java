@@ -1,6 +1,6 @@
 package Part2.package2;
 
-import Part1.package3.Metro;
+import Part2.package3.Metro;
 
 public class Tram extends Metro {
     private int yearOfCreation;
@@ -35,6 +35,7 @@ public class Tram extends Metro {
         return false;
     }
 
+    @Override
     public Tram makeCopy() {
         return new Tram(this);
     }

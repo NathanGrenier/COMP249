@@ -1,6 +1,6 @@
 package Part2.package3;
 
-import Part1.package2.Train;
+import Part2.package2.Train;
 
 public class Metro extends Train {
     protected int stopCount;
@@ -34,6 +34,7 @@ public class Metro extends Train {
         return false;
     }
 
+    @Override
     public Metro makeCopy() {
         return new Metro(this);
     }

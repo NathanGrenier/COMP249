@@ -1,6 +1,6 @@
 package Part2.package4;
 
-import Part1.package1.WheeledTransportation;
+import Part2.package1.WheeledTransportation;
 
 public class Monowheel extends WheeledTransportation {
     private double maxWeight;
@@ -33,6 +33,7 @@ public class Monowheel extends WheeledTransportation {
         return false;
     }
 
+    @Override
     public Monowheel makeCopy() {
         return new Monowheel(this);
     }
