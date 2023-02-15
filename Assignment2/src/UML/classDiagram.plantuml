@@ -1,37 +1,53 @@
 @startuml Hello world
 scale 1
 
+interface Copyable {
+    +makeCopy()
+}
+
 package package1 {
     class WheeledTransportation {
         #wheelCount : int
         #maxSpeed : double
         +toString()
         +equals()
-        +copy()
+        +makeCopy()
     }
 }
 
 package package2 {
     class Tram {
         -yearOfCreation : int
+        +toString()
+        +equals()
+        +makeCopy()
     }
     
     class Train {
         #vehicleCount : int
         #startStation : String
         #endStation : String
+        +toString()
+        +equals()
+        +makeCopy()
     }
 }
 
 package package3 {
     class Metro {
         #stopCount : int
+        +toString()
+        +equals()
+        +makeCopy()
     }
 }
 
 package package4 {
     class Monowheel {
         -maxWeight : double
+        +toString()
+        +equals()
+        +makeCopy()
     }
     
 
@@ -41,6 +57,9 @@ package package5 {
     class Ferry {
         -maxSpeed : double
         -maxLoad : double
+        +toString()
+        +equals()
+        +makeCopy()
     }
 }
 
@@ -48,10 +67,16 @@ package package6 {
     class Aircraft {
         #price : double
         #maxElevation : double
+        +toString()
+        +equals()
+        +makeCopy()
     }
 
     class WW2Plane {
         -twinEngine : boolean
+        +toString()
+        +equals()
+        +makeCopy()
     }
 }
 
@@ -61,6 +86,10 @@ class Metro extends Train
 class Tram extends Metro
 class Monowheel extends WheeledTransportation
 class WW2Plane extends Aircraft
+
+class WheeledTransportation implements Copyable
+class Aircraft implements Copyable
+class Ferry implements Copyable
 
 /'
 Arrow implementation of inheritance
