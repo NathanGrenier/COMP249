@@ -1,3 +1,13 @@
+// -----------------------------------------------------
+// Assignment 2
+// Question: Part 2
+// Written by: Nathan Grenier, 40250986
+// COMP 249
+// Due Date: Febuary 24, 2023
+// 
+// This is the WW2Plane class. It extends the Aircraft class.
+// -----------------------------------------------------
+
 package Part2.package5;
 
 public class WW2Plane extends Aircraft {

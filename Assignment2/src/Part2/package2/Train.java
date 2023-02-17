@@ -1,3 +1,13 @@
+// -----------------------------------------------------
+// Assignment 2
+// Question: Part 2
+// Written by: Nathan Grenier, 40250986
+// COMP 249
+// Due Date: Febuary 24, 2023
+// 
+// This is the Train class. It extends WheeledTransportation.
+// -----------------------------------------------------
+
 package Part2.package2;
 
 import Part2.package1.WheeledTransportation;

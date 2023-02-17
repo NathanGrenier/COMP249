@@ -1,3 +1,13 @@
+// -----------------------------------------------------
+// Assignment 2
+// Question: Part 2
+// Written by: Nathan Grenier, 40250986
+// COMP 249
+// Due Date: Febuary 24, 2023
+// 
+// This is the Metro class. It extends the Train class.
+// -----------------------------------------------------
+
 package Part2.package3;
 
 import Part2.package2.Train;

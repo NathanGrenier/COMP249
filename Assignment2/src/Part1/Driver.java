@@ -1,3 +1,13 @@
+// -----------------------------------------------------
+// Assignment 2
+// Question: Part 1
+// Written by: Nathan Grenier, 40250986
+// COMP 249
+// Due Date: Febuary 24, 2023
+// 
+// This is the Driver class. Its purpose is to test the classes made in the Part1 package.
+// -----------------------------------------------------
+
 package Part1;
 
 import Part1.package1.*;
