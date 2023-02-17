@@ -1,3 +1,13 @@
+// -----------------------------------------------------
+// Assignment 2
+// Question: Part 2
+// Written by: Nathan Grenier, 40250986
+// COMP 249
+// Due Date: Febuary 24, 2023
+// 
+// This is the Driver class. It test the copyTheObject method.
+// -----------------------------------------------------
+
 package Part2;
 
 import Part2.package1.*;
