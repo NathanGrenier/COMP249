@@ -1,3 +1,0 @@
-CPU: Intel
-RAM: 3200
-Storage: 10
