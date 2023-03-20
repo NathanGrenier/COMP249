@@ -15,6 +15,7 @@ import java.util.Scanner;
 public class Driver {
     private static final String inputFileName = "Assignment3/Files/Read/part1_input_file_names.txt";
     private static final String outputFileName = "Assignment3/Files/Read/part1_output_file_names.txt";
+    private static final String outputFileDirectory = "Assignment3/Files/Write";
 
     /**
      * Opens a file to read data from.
@@ -22,7 +23,7 @@ public class Driver {
      * @param name
      * @return Scanner linked to input file.
      */
-    private static Scanner openFile(String name) {
+    private static Scanner readFile(String name) {
         Scanner input = null;
         try {
             input = new Scanner(new FileInputStream(name));
@@ -40,18 +41,35 @@ public class Driver {
      * @param append
      * @return PrintWriter object linked to output file.
      */
-    private static PrintWriter openOutputFile(String name, boolean append) {
+    private static PrintWriter writeFile(String name, boolean append) {
         PrintWriter output = null;
         try {
-            output = new PrintWriter(new FileOutputStream(name));
+            output = new PrintWriter(new FileOutputStream(outputFileDirectory + name, append));
         } catch (FileNotFoundException e) {
             System.out.println("File: " + name + "couldn't be found or created");
         }
         return output;
     }
 
-    private static String[] parseBooks() {
+    private static String[][] parseBook(String name) {
+        
+    }
 
+    private static void createOutputFiles(String[] bookFiles, String[][] outputFileInfo) {
+        // Open/create every output file and store them in an array. The order of this array is the same as the order of the genres in the outputFileName.txt file.
+        PrintWriter[] outputFiles = new PrintWriter[outputFileInfo.length];
+        for (int i=0; i < outputFileInfo.length; i++) {
+            outputFiles[i] = writeFile(outputFileInfo[i][2], false);
+        }
+
+        // Read each book from the bookFiles array individualy and append their entries to the output files
+        for (String file:bookFiles) {
+            Scanner read = readFile(file);
+            if (read == null) {continue;}
+            while (read.hasNextLine()) {
+
+            }
+        }
     }
 
     
@@ -59,7 +77,7 @@ public class Driver {
     
     private static void do_part1() {
         // Open file containing the name of the files that contain the books and their information
-        Scanner inputFileNameReader = openFile(inputFileName);
+        Scanner inputFileNameReader = readFile(inputFileName);
         if (inputFileNameReader == null) {
             System.out.println("The file containing the names of the files that contain the recorded books does not exist. Terminating program.");
             System.exit(0);
@@ -73,16 +91,16 @@ public class Driver {
         }
 
         // Parse file containing the names of the genres and file output names
-        Scanner outputFileNameReader = openFile(outputFileName);
+        Scanner outputFileNameReader = readFile(outputFileName);
         if (outputFileNameReader == null) {
             System.out.println("The file containing the names of the genres does not exist. Terminating program.");
             System.exit(0);
         }
         // Parse the file containing the genres and store them in an array
         int genreCount = Integer.parseInt(outputFileNameReader.nextLine());
-        String[][] outputFiles = new String[genreCount][3]; // Format: [Name, Genre, File Name]
+        String[][] outputFileInfo = new String[genreCount][3]; // Format: [Name, Genre, File Name]
         for (int i=0; i < genreCount; i++) {
-            outputFiles[i] = outputFileNameReader.nextLine().split(",");
+            outputFileInfo[i] = outputFileNameReader.nextLine().split(",");
         }
 
 
