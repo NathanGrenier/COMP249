@@ -1,0 +1,10 @@
+9
+Cartoons & Comics Books, CCB, Cartoons_Comics_Books.csv
+Hobbies & Collectibles Books, HCB, Hobbies_Collectibles_Books.csv
+Movies & TV, MTV, Movies_TV.csv
+Music & Radio Books, MRB, Music_Radio_Books.csv
+Nostalgia & Eclectic Books, NEB, Nostalgia_Eclectic_Books.csv
+Old-Time Radio, OTR, Old_Time_Radio.csv
+Sports & Sports Memorabilia, SSM, Sports_Sports_Memorabilia.csv
+"Trains, Planes & Automobiles", TPA, Trains_Planes_Automobiles.csv
+Bad CSV-formatted Book Recrds, BAD, syntax_error_file.txt
