@@ -4,6 +4,8 @@
  // Assignment #3
  // Question: (include question/part number, if applicable)
  // Due: March 24, 2023
+ //
+ // Note: This program relies on the exsiting file structure. If it isn't ordered the exact same way, it will not work.
  // -----------------------------------------------------
 
 import java.io.FileInputStream;
@@ -12,10 +14,13 @@ import java.io.FileOutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import Exceptions.TooManyFieldsException;
+
 public class Driver {
     private static final String inputFileName = "Assignment3/Files/Read/part1_input_file_names.txt";
     private static final String outputFileName = "Assignment3/Files/Read/part1_output_file_names.txt";
-    private static final String outputFileDirectory = "Assignment3/Files/Write";
+    private static final String readFileDirectory = "Assignment3/Files/Read/";
+    private static final String writeFileDirectory = "Assignment3/Files/Write/";
 
     /**
      * Opens a file to read data from.
@@ -44,7 +49,7 @@ public class Driver {
     private static PrintWriter writeFile(String name, boolean append) {
         PrintWriter output = null;
         try {
-            output = new PrintWriter(new FileOutputStream(outputFileDirectory + name, append));
+            output = new PrintWriter(new FileOutputStream(name, append));
         } catch (FileNotFoundException e) {
             System.out.println("File: " + name + "couldn't be found or created");
         }
@@ -58,16 +63,31 @@ public class Driver {
     private static void createOutputFiles(String[] bookFiles, String[][] outputFileInfo) {
         // Open/create every output file and store them in an array. The order of this array is the same as the order of the genres in the outputFileName.txt file.
         PrintWriter[] outputFiles = new PrintWriter[outputFileInfo.length];
+        String[] genres = new String[outputFileInfo.length];
         for (int i=0; i < outputFileInfo.length; i++) {
-            outputFiles[i] = writeFile(outputFileInfo[i][2], false);
+            genres[i] = outputFileInfo[i][1];   // Create array of abbreviated genres in same order as outputfile names
+            outputFiles[i] = writeFile(outputFileInfo[i][2], false);    // Creates output file
+        }
+
+        // This is for testing purposes
+        try {
+            throw new TooManyFieldsException();
+        } catch (TooManyFieldsException e) {
+            e.logError(outputFiles[0],);
         }
 
         // Read each book from the bookFiles array individualy and append their entries to the output files
+        String temp;
         for (String file:bookFiles) {
             Scanner read = readFile(file);
             if (read == null) {continue;}
             while (read.hasNextLine()) {
+                temp = read.nextLine();
+                try {
+                    // Put all verification functions in here
+                } catch () {
 
+                }
             }
         }
     }
@@ -82,15 +102,14 @@ public class Driver {
             System.out.println("The file containing the names of the files that contain the recorded books does not exist. Terminating program.");
             System.exit(0);
         }
-        
         // Parse the file containing file names and store the names in an array
         int bookFileCount = Integer.parseInt(inputFileNameReader.nextLine());   // The first line will always be a number
         String[] bookFiles = new String[bookFileCount];
         for (int i=0; i < bookFileCount; i++) {
-            bookFiles[i] = inputFileNameReader.nextLine();
+            bookFiles[i] = readFileDirectory + inputFileNameReader.nextLine();
         }
 
-        // Parse file containing the names of the genres and file output names
+        // Open file containing the names of the output files
         Scanner outputFileNameReader = readFile(outputFileName);
         if (outputFileNameReader == null) {
             System.out.println("The file containing the names of the genres does not exist. Terminating program.");
@@ -100,9 +119,14 @@ public class Driver {
         int genreCount = Integer.parseInt(outputFileNameReader.nextLine());
         String[][] outputFileInfo = new String[genreCount][3]; // Format: [Name, Genre, File Name]
         for (int i=0; i < genreCount; i++) {
-            outputFileInfo[i] = outputFileNameReader.nextLine().split(",");
+            outputFileInfo[i] = outputFileNameReader.nextLine().split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); // Regex: /,(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)/
+            for (int j=0; j < outputFileInfo[i].length; j++) {
+                outputFileInfo[i][j] = outputFileInfo[i][j].trim();
+            }
+            outputFileInfo[i][2] = writeFileDirectory + outputFileInfo[i][2];   // Modify the path to the output files
         }
-
+ 
+        createOutputFiles(bookFiles, outputFileInfo);
 
     }
     
