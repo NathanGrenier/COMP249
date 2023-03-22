@@ -1,7 +1,5 @@
 import java.io.PrintWriter;
 
-import org.w3c.dom.NameList;
-
 public class OutputFile {
     String name;
     String genre;
