@@ -2,17 +2,21 @@
  // Written by: Nathan Grenier, 40250986
  // COMP249
  // Assignment #3
- // Question: (include question/part number, if applicable)
+ // Question: Part 1,2 and 3
  // Due: March 24, 2023
  //
- // Note: This program relies on the exsiting file structure. If it isn't ordered the exact same way, it will not work.
+ // Note: This program relies on the exsiting file structure. If it isn't ordered the exact same way, it will not work. The following is what the structure should look like:
+ // Assignment3/
+ // ├─ Files/
+ // │  ├─ Read/
+ // │  ├─ Write/
+ // ├─ src/
  // -----------------------------------------------------
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
 import java.util.Scanner;
 
 import Exceptions.MissingFieldException;
