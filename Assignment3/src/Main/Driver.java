@@ -300,6 +300,7 @@ public class Driver {
         return newList;
     }
     
+    // TODO 1. Clean up the code (maybe make some functions for the repeated functionality / super nested blocks) 2. Validate that the information in the binary files are actually correct.
     private static void do_part2() {
         // Open file containing the names of the output files
         Scanner outputFileNameReader = readFile(outputFilesPath);
