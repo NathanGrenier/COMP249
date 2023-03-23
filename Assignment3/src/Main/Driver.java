@@ -523,12 +523,12 @@ public class Driver {
                     if (outOfBounds) {break;}
                     try {
                         System.out.println("Index "+ i + ": " + OutputFile[currentFileIndex].books[i]);
-                        // When we are on the last iteration of the loop, update the currentBookIndex
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("EOF has been reached");
                         outOfBounds = true;
                         currentBookIndex = i - 1;   // Set current book to the one just before the error
                     }
+                    // When we are on the last iteration of the loop and we are not outOfBounds, update the currentBookIndex
                     if (i == currentBookIndex + (n - 1) && !outOfBounds) {
                         currentBookIndex = i;
                         break;
