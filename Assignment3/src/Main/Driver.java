@@ -518,34 +518,30 @@ public class Driver {
     
             // Evaluate and show the books to the user
             if (n > 0) {
-                boolean outOfBounds = false;
                 for (int i=currentBookIndex; i <= currentBookIndex + (n - 1); i++) {
-                    if (outOfBounds) {break;}
                     try {
                         System.out.println("Index "+ i + ": " + OutputFile[currentFileIndex].books[i]);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("EOF has been reached");
-                        outOfBounds = true;
                         currentBookIndex = i - 1;   // Set current book to the one just before the error
+                        break; 
                     }
                     // When we are on the last iteration of the loop and we are not outOfBounds, update the currentBookIndex
-                    if (i == currentBookIndex + (n - 1) && !outOfBounds) {
+                    if (i == currentBookIndex + (n - 1)) {
                         currentBookIndex = i;
                         break;
                     }
                 }
             } else if (n < 0) {
-                boolean outOfBounds = false;
                 for (int i=currentBookIndex; i >= currentBookIndex - (Math.abs(n) - 1); i--) {
-                    if (outOfBounds) {break;}
                     try {
                         System.out.println("Index "+ i + ": " + OutputFile[currentFileIndex].books[i]);
                     } catch (IndexOutOfBoundsException e) {
                         System.out.println("BOF has been reached");
-                        outOfBounds = true;
                         currentBookIndex = i + 1; // Set current book to the one just before the error (+ because i--)
+                        break;
                     }
-                    if (i == currentBookIndex - (Math.abs(n) - 1) && !outOfBounds) {
+                    if (i == currentBookIndex - (Math.abs(n) - 1)) {
                         currentBookIndex = i;
                         break;
                     }
