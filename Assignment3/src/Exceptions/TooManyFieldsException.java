@@ -5,9 +5,9 @@ public class TooManyFieldsException extends SyntaxException {
         super("TooManyFields Exception.");
     }
     
-    public TooManyFieldsException(String fileName, String record) {
+    public TooManyFieldsException(String fileName, String entry) {
         this();
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }

@@ -1,7 +1,6 @@
 package Main;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
-import java.util.Arrays;
 
 public class OutputFile {
     public String name;

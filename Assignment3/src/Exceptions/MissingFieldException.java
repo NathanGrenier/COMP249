@@ -5,9 +5,9 @@ public class MissingFieldException extends SyntaxException {
         super("MissingField Exception. Missing: " + field);
     }
 
-    public MissingFieldException(String fileName, String record, String field) {
+    public MissingFieldException(String fileName, String entry, String field) {
         this(field);
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }

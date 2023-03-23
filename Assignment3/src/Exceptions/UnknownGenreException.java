@@ -5,9 +5,9 @@ public class UnknownGenreException extends SyntaxException {
         super("UnknownGenre Exception.");
     }
 
-    public UnknownGenreException(String fileName, String record) {
+    public UnknownGenreException(String fileName, String entry) {
         this();
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }

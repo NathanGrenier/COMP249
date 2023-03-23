@@ -14,18 +14,15 @@ package Main;
  // ├─ src/
  // -----------------------------------------------------
 
-import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 
 import Exceptions.BadIsbn10Exception;
 import Exceptions.BadIsbn13Exception;
@@ -37,7 +34,6 @@ import Exceptions.SyntaxException;
 import Exceptions.TooFewFieldsException;
 import Exceptions.TooManyFieldsException;
 import Exceptions.UnknownGenreException;
-import javafx.css.SimpleStyleableDoubleProperty;
 
 public class Driver {
     private static final String inputFilesPath = "Assignment3/Files/Read/part1_input_file_names.txt";
@@ -46,6 +42,17 @@ public class Driver {
     private static final String writeFileDirectory = "Assignment3/Files/Write/";
     private static final String[] orderOfBookFields = {"Title", "Author", "Price", "ISBN", "Genre", "Year"};
     private static final String commaRegex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+
+    /* 
+  _____           _     __       _    _      _                   ______                _   _                 
+ |  __ \         | |   /_ |  _  | |  | |    | |                 |  ____|              | | (_)                
+ | |__) |_ _ _ __| |_   | | (_) | |__| | ___| |_ __   ___ _ __  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___ 
+ |  ___/ _` | '__| __|  | |     |  __  |/ _ \ | '_ \ / _ \ '__| |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+ | |  | (_| | |  | |_   | |  _  | |  | |  __/ | |_) |  __/ |    | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+ |_|   \__,_|_|   \__|  |_| (_) |_|  |_|\___|_| .__/ \___|_|    |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+                                              | |                                                            
+                                              |_|                                                            
+*/
 
     /**
      * Opens a file to read data from.
@@ -161,6 +168,7 @@ public class Driver {
         }
         return outputFileInfo;
     }
+    
     /*  
     _____           _     __ 
     |  __ \         | |   /_ |
@@ -231,6 +239,16 @@ public class Driver {
         closeOutputFileStreams(outputFiles);
     }
 
+/* 
+    _____           _     ___        _    _      _                   ______                _   _                 
+    |  __ \         | |   |__ \   _  | |  | |    | |                 |  ____|              | | (_)                
+    | |__) |_ _ _ __| |_     ) | (_) | |__| | ___| |_ __   ___ _ __  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___ 
+    |  ___/ _` | '__| __|   / /      |  __  |/ _ \ | '_ \ / _ \ '__| |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+    | |  | (_| | |  | |_   / /_   _  | |  | |  __/ | |_) |  __/ |    | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+    |_|   \__,_|_|   \__| |____| (_) |_|  |_|\___|_| .__/ \___|_|    |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+                                                   | |                                                            
+                                                   |_|                                                            
+*/
 
     private static void validateIsbn10(String fileName, String currentLine) throws SemanticException {
         int sum = 0;
@@ -334,7 +352,6 @@ public class Driver {
     |_|   \__,_|_|   \__| |____|                         
     */    
 
-    // TODO 2. Validate that the information in the binary files are actually correct.
     private static void do_part2() {
         // Open file containing the names of the output files
         Scanner outputFileNameReader = readFile(outputFilesPath);
@@ -404,14 +421,16 @@ public class Driver {
         outputFiles[outputFiles.length - 1].outputStream.close();
     }
     
-    /*  
-    _____           _     ____  
-    |  __ \         | |   |___ \ 
-    | |__) |_ _ _ __| |_    __) |
-    |  ___/ _` | '__| __|  |__ < 
-    | |  | (_| | |  | |_   ___) |
-    |_|   \__,_|_|   \__| |____/                        
-    */  
+/*
+  _____           _     ____        _    _      _                   ______                _   _                 
+ |  __ \         | |   |___ \   _  | |  | |    | |                 |  ____|              | | (_)                
+ | |__) |_ _ _ __| |_    __) | (_) | |__| | ___| |_ __   ___ _ __  | |__ _   _ _ __   ___| |_ _  ___  _ __  ___ 
+ |  ___/ _` | '__| __|  |__ <      |  __  |/ _ \ | '_ \ / _ \ '__| |  __| | | | '_ \ / __| __| |/ _ \| '_ \/ __|
+ | |  | (_| | |  | |_   ___) |  _  | |  | |  __/ | |_) |  __/ |    | |  | |_| | | | | (__| |_| | (_) | | | \__ \
+ |_|   \__,_|_|   \__| |____/  (_) |_|  |_|\___|_| .__/ \___|_|    |_|   \__,_|_| |_|\___|\__|_|\___/|_| |_|___/
+                                                 | |                                                            
+                                                 |_|                                                            
+ */
 
     private static ObjectInputStream readBinaryFile(String path) {
         ObjectInputStream input = null;
@@ -473,7 +492,9 @@ public class Driver {
         return newFileIndex; 
     }
 
-    private static void viewFile() {}
+    private static void viewFile() {
+
+    }
 
     public static void runMenu(OutputFile[] outputFiles) {
         String userInput;
@@ -488,7 +509,7 @@ public class Driver {
             
             switch(userInput) {
             case "v":
-                
+                viewFile();
                 break;
             case "s":
                 currentFileIndex = selectFile(outputFiles, currentFileIndex);
@@ -505,6 +526,15 @@ public class Driver {
         
         System.out.println("Thank you for using the Filtered Book Catalogue!");
     }
+
+    /*  
+    _____           _     ____  
+    |  __ \         | |   |___ \ 
+    | |__) |_ _ _ __| |_    __) |
+    |  ___/ _` | '__| __|  |__ < 
+    | |  | (_| | |  | |_   ___) |
+    |_|   \__,_|_|   \__| |____/                        
+    */ 
 
     private static void do_part3() {
         // Open file containing the names of the output files

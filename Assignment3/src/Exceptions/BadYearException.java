@@ -5,9 +5,9 @@ public class BadYearException extends SemanticException {
         super("BadYear Exception.");
     }
 
-    public BadYearException(String fileName, String record) {
+    public BadYearException(String fileName, String entry) {
         this();
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }

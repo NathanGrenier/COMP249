@@ -1,7 +1,5 @@
 package Exceptions;
 
-import java.io.PrintWriter;
-
 import Main.OutputFile;
 
 public class SyntaxException extends EntryException{
@@ -13,7 +11,7 @@ public class SyntaxException extends EntryException{
         logFile.outputStream.println("Syntax Error in File: " + this.fileName);
         logFile.outputStream.println("====================");
         logFile.outputStream.println("Error: " + getMessage());
-        logFile.outputStream.println("Record: " + this.record);
+        logFile.outputStream.println("Record: " + this.entry);
         logFile.outputStream.println();
     }
 }

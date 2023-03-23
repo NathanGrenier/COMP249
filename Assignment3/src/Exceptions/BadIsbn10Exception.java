@@ -5,9 +5,9 @@ public class BadIsbn10Exception extends SemanticException {
         super("BadIsbn10 Exception.");
     }
 
-    public BadIsbn10Exception(String fileName, String record) {
+    public BadIsbn10Exception(String fileName, String entry) {
         this();
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }

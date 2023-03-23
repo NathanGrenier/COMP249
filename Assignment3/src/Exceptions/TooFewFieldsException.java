@@ -5,9 +5,9 @@ public class TooFewFieldsException extends SyntaxException {
         super("TooFewFeilds Exception.");
     }
 
-    public TooFewFieldsException(String fileName, String record) {
+    public TooFewFieldsException(String fileName, String entry) {
         this();
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }

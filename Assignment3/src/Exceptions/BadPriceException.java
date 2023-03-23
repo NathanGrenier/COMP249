@@ -5,9 +5,9 @@ public class BadPriceException extends SemanticException {
         super("BadPrice Exception.");
     }
 
-    public BadPriceException(String fileName, String record) {
+    public BadPriceException(String fileName, String entry) {
         this();
         this.fileName = fileName;
-        this.record = record;
+        this.entry = entry;
     }
 }
