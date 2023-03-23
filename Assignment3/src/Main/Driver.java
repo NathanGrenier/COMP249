@@ -35,6 +35,15 @@ import Exceptions.TooFewFieldsException;
 import Exceptions.TooManyFieldsException;
 import Exceptions.UnknownGenreException;
 
+/**
+ * Runs the Book Managment System. This:
+ * 1. Validates all the book entires
+ * 2. Creates the validated output files
+ * 3. Displays a navigation menu to the user that allows them to view any book record in the system.
+ * 
+ * @author Nathan Grenier
+ * @version 1.0
+ */
 public class Driver {
     private static final String inputFilesPath = "Assignment3/Files/Read/part1_input_file_names.txt";
     private static final String outputFilesPath = "Assignment3/Files/Read/part1_output_file_names.txt";
@@ -88,6 +97,12 @@ public class Driver {
         return output;
     }
 
+    /**
+     * Takes in a list of OutputFiles and opens their PrintWriters. The append parameter determines if the file will be overwriten or appended.
+     * 
+     * @param list
+     * @param append
+     */
     private static void openOutputFileStreams(OutputFile[] list, boolean append) {
         for (OutputFile file:list) {
             if (file.outputStream == null) {
@@ -98,6 +113,11 @@ public class Driver {
         }
     }
 
+    /**
+     * Takes a list of OutputFiles and closes their PrintWriters
+     * 
+     * @param list
+     */
     private static void closeOutputFileStreams(OutputFile[] list) {
         for (OutputFile file:list) {
             if (file.outputStream != null) {
@@ -108,6 +128,13 @@ public class Driver {
         }
     }
 
+    /**
+     * Finds the OutputFile from the passed list that has the targetGenre. If no file exists, retun null. 
+     * 
+     * @param list
+     * @param targetGenre
+     * @return OutputFile
+     */
     private static OutputFile findOutputFile(OutputFile[] list, String targetGenre) {
         for (OutputFile file:list) {
             if (file.genre.equals(targetGenre)) {
@@ -118,6 +145,15 @@ public class Driver {
         return null;
     }
 
+    /**
+     * Validates the number of fields of a book record. Checks if the book either:
+     * 1. Has too many fields
+     * 2. Has too few fields
+     * 
+     * @param fileName
+     * @param currentLine
+     * @throws SyntaxException
+     */
     private static void validateFieldCount(String fileName, String currentLine) throws SyntaxException {
         String[] record = currentLine.split(commaRegex);
         if (record.length > 6) {
@@ -127,6 +163,13 @@ public class Driver {
         }
     }
 
+    /**
+     * Throws a SyntaxException if one of the book's fields is empty
+     * 
+     * @param fileName
+     * @param currentLine
+     * @throws SyntaxException
+     */
     private static void validateFieldValues(String fileName, String currentLine) throws SyntaxException{
         // Validate that no field is empty
         String[] record = currentLine.split(commaRegex);
@@ -137,6 +180,14 @@ public class Driver {
         }
     }
 
+    /**
+     * Compares the current book record's genre to that of all OutputFiles. If one of them matches, the record is valid.
+     * 
+     * @param fileName
+     * @param currentLine
+     * @param list
+     * @throws SyntaxException
+     */
     private static void validateGenres(String fileName, String currentLine, OutputFile[] list) throws SyntaxException{
         String[] record = currentLine.split(commaRegex);
         // index 4 corresponds to the genre. Format: [Title, Author, Price, ISBN, Genre, year]
@@ -148,6 +199,12 @@ public class Driver {
         throw new UnknownGenreException(fileName, currentLine);
     }
 
+    /**
+     * Creates the OutputFile objects using information from the output_file_names file.
+     * 
+     * @param outputFileInfo
+     * @return OutputFile[]
+     */
     private static OutputFile[] createOutputFiles(String[][] outputFileInfo) {
         // Create every outputFile and store them in an array
         OutputFile[] outputFiles = new OutputFile[outputFileInfo.length];
@@ -157,6 +214,13 @@ public class Driver {
         return outputFiles;
     }
 
+    /**
+     * Reads the file containing the files to be output and parses their information.
+     * 
+     * @param reader
+     * @param genreCount
+     * @return String[][] containing each OutputFile's information in the format: [[Name, Genre, path], ...]
+     */
     private static String[][] getOutputFilesInfo(Scanner reader, int genreCount) {
         String[][] outputFileInfo = new String[genreCount][3]; // Format: [Name, Genre, FileName]
         for (int i=0; i < genreCount; i++) {
@@ -177,7 +241,11 @@ public class Driver {
     | |  | (_| | |  | |_   | |
     |_|   \__,_|_|   \__|  |_|
     */                       
-                            
+              
+    /**
+     * Validates syntax and partition book records based on genre into text files.
+     * 
+     */
     private static void do_part1() {
         // Open file containing the name of the files that contain the books and their information
         Scanner inputFileNameReader = readFile(inputFilesPath);
@@ -250,6 +318,14 @@ public class Driver {
                                                    |_|                                                            
 */
 
+    /**
+     * Validates the ISBN of the current book record only if it has exactly 10 digits. 
+     * A valid ISBN only contains numbers and where sum(10x1 + 9x2 + 8x3 + 7x4 + 6x5 + 5x6 + 4x7 + 3x8 + 2x9 + 1x10) is a multiple of 11.
+     * 
+     * @param fileName
+     * @param currentLine
+     * @throws SemanticException
+     */
     private static void validateIsbn10(String fileName, String currentLine) throws SemanticException {
         int sum = 0;
         String [] record = currentLine.split(commaRegex);
@@ -279,6 +355,14 @@ public class Driver {
         }  
     }
 
+    /**
+     * Validates the current record's ISBN only if it has exactly 13 digits.
+     * A valid ISBN only contains numbers and where sum(x1 +3x2 +x3 +3x4 +x5 +3x6 +x7 +3x8 +x9 +3x10 +x11 +3x12 +x13) is a multiple of 10.
+     * 
+     * @param fileName
+     * @param currentLine
+     * @throws SemanticException
+     */
     private static void validateIsbn13(String fileName, String currentLine) throws SemanticException {
         int sum = 0;
         String [] record = currentLine.split(commaRegex);
@@ -308,6 +392,13 @@ public class Driver {
         }  
     }
 
+    /**
+     * Validates that the current record's price is a positive value. 
+     * 
+     * @param fileName
+     * @param currentLine
+     * @throws SemanticException
+     */
     private static void validatePrice(String fileName, String currentLine) throws SemanticException {
         String [] record = currentLine.split(commaRegex);
         
@@ -316,6 +407,13 @@ public class Driver {
         }
     }
 
+    /**
+     * Validates that the current records year falls between [1995-2010].
+     * 
+     * @param fileName
+     * @param currentLine
+     * @throws SemanticException
+     */
     private static void validateYear(String fileName, String currentLine) throws SemanticException {
         String [] record = currentLine.split(commaRegex);
         int year = Integer.parseInt(record[5]);
@@ -325,16 +423,11 @@ public class Driver {
         }
     }
     
-    private static Book[] addBook(Book[] list, Book book) {
-        Book[] newList = new Book[list.length + 1];
-        for (int i=0; i < list.length; i++) {
-            newList[i] = list[i];
-        }
-        newList[newList.length - 1] = book;
-
-        return newList;
-    }
-
+    /**
+     * Closes the ObjectOutputStream of the passed OutputFile.
+     * 
+     * @param file
+     */
     private static void closeObjectOutputStream(OutputFile file) {
         try {
             file.binaryOutputStream.close();
@@ -352,6 +445,9 @@ public class Driver {
     |_|   \__,_|_|   \__| |____|                         
     */    
 
+    /**
+     * Validates semantics, read the genre files each into arrays of Book objects, then serialize the arrays of Book objects each into binary files.
+     */
     private static void do_part2() {
         // Open file containing the names of the output files
         Scanner outputFileNameReader = readFile(outputFilesPath);
@@ -432,6 +528,12 @@ public class Driver {
                                                  |_|                                                            
  */
 
+    /**
+    * Returns an open ObjectInputStream for the passed file path.  
+    * 
+    * @param path
+    * @return ObjectInputStream
+    */
     private static ObjectInputStream readBinaryFile(String path) {
         ObjectInputStream input = null;
         try {
@@ -446,6 +548,11 @@ public class Driver {
         return input;
     }
 
+    /**
+     * Displays the Main Menu to the user through the console. No other functionality.
+     * 
+     * @param currentFile
+     */
     public static void displayMenu(OutputFile currentFile) {
         System.out.println("---------------------------------------------------------------------------------------\n" 
                           +"|                                       Main Menu                                     |\n"
@@ -456,12 +563,28 @@ public class Driver {
                           +"---------------------------------------------------------------------------------------");
     }
 
+    /**
+     * Creates a Scanner object with the System.in stream, prompt the user with the passed message, and return the user's input.
+     * 
+     * @param message
+     * @return String of users input (1 line only)
+     */
     private static String getUserInput(String message) {
         Scanner kb = new Scanner(System.in);
         System.out.print("\n" + message);
         return kb.nextLine();
     }
 
+    /**
+     * Dilsplays the File Sub-Menu and all of the OutputFiles a user can choose to navigate. Prompts the user for a number corresponding to
+     * the file they want to navigate. Validates that the user's input corresponds to one of the available options. 
+     * If the user enters a number corresponding to 1 + the total number of available files, 
+     * the Sub-Menu will exit and return to the Main Menu. 
+     * 
+     * @param outputFiles
+     * @param currentFileIndex
+     * @return updated currentFileIndex (corresponding to user input)
+     */
     private static int selectFile(OutputFile[] outputFiles, int currentFileIndex) {
         System.out.println("---------------------------------------------------------------------------------------\n" 
                           +"|                                     File Sub-Menu                                   |\n"
@@ -492,6 +615,11 @@ public class Driver {
         return newFileIndex; 
     }
 
+    /**
+     * Prompts the user to enter the number of Book objects they want displayed. Validates that the user's input is a integer.
+     * 
+     * @return integer corresponding to how many records the user want to display.
+     */
     private static int validateNumber() {
         boolean valid = false;
         int n = 0;
@@ -506,6 +634,16 @@ public class Driver {
         return n;
     }
 
+    /**
+     * Calls validateNumber() to get the number of Book objects the user wants displayed in the OutputFile at the currentFileIndex then displayes them.
+     * The number of Books to be displayed corresponds to the number (n) inputed by the user. The first book displayed will always be Book at the currentBookIndex, followed by the n-1 Books below or above it in the array, depending on if n is positive or negative. 
+     * If the end or begining of the array is reached, and appropriate error message will be displayed to the console and the currentBookIndex will correspond to either the last or first book in the array, respectively.
+     * The user will get re-prompted as long as they don't enter 0, which will return the user back to the Main Menu.
+     * 
+     * @param OutputFile
+     * @param currentFileIndex
+     * @param currentBookIndex
+     */
     private static void viewFile(OutputFile[] OutputFile, int currentFileIndex, int currentBookIndex) {
         System.out.printf("Viewing: %s (%d records)%n", OutputFile[currentFileIndex].binaryPath, OutputFile[currentFileIndex].entryCount);
         
@@ -551,6 +689,12 @@ public class Driver {
         System.out.println("\nExiting View Mode.\n");
     }
 
+    /**
+     * Takes in an array of OutputFiles and runs the visual navigation Menu for the user.
+     * Will end the program if the user enters the value x (not case sensitive).
+     * 
+     * @param outputFiles
+     */
     public static void runMenu(OutputFile[] outputFiles) {
         String userInput;
         int currentFileIndex = 0;
@@ -596,6 +740,9 @@ public class Driver {
     |_|   \__,_|_|   \__| |____/                        
     */ 
 
+    /**
+     * Reads the binary files, deserialize the array objects in each file and stores them in their corresponding OutputFile, then provides an interacive program to allow the user to navigate the Book arrays of the OutputFiles.
+     */
     private static void do_part3() {
         // Open file containing the names of the output files
         Scanner outputFileNameReader = readFile(outputFilesPath);

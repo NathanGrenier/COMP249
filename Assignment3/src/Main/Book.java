@@ -1,7 +1,20 @@
+ // -----------------------------------------------------
+ // Written by: Nathan Grenier, 40250986
+ // COMP249
+ // Assignment #3
+ // Question: Part 3
+ // Due: March 24, 2023
+ // -----------------------------------------------------
 package Main;
 
 import java.io.Serializable;
 
+/**
+ * A Book contains the information of a book record and is serializable.
+ * 
+ * @author Nathan Grenier
+ * @version 1.0
+ */
 public class Book implements Serializable {
     private String title;
     private String authors;
@@ -17,6 +30,13 @@ public class Book implements Serializable {
         this.year = year;
     }
 
+    /**
+     * Verifies if 2 objects are of the same type and that their attributes are all
+     * equal.
+     * 
+     * @param otherObj
+     * @return boolean
+     */
     @Override
     public boolean equals(Object otherObj) {
         if (otherObj == null) {
@@ -29,6 +49,11 @@ public class Book implements Serializable {
         }
     }
 
+    /**
+     * Returns the attributes of a Book object.
+     * 
+     * @return String
+     */
     @Override
     public String toString() {
         return "Book{title=" + this.title + ", authors=" + this.authors + ", price=" + this.price + ", isbn=" + this.isbn + ", year=" + this.year + "}";
