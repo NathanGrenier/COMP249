@@ -14,15 +14,18 @@ package Main;
  // ├─ src/
  // -----------------------------------------------------
 
+import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Arrays;
+import java.util.InputMismatchException;
 
 import Exceptions.BadIsbn10Exception;
 import Exceptions.BadIsbn13Exception;
@@ -34,6 +37,7 @@ import Exceptions.SyntaxException;
 import Exceptions.TooFewFieldsException;
 import Exceptions.TooManyFieldsException;
 import Exceptions.UnknownGenreException;
+import javafx.css.SimpleStyleableDoubleProperty;
 
 public class Driver {
     private static final String inputFilesPath = "Assignment3/Files/Read/part1_input_file_names.txt";
@@ -146,7 +150,26 @@ public class Driver {
         return outputFiles;
     }
 
-    
+    private static String[][] getOutputFilesInfo(Scanner reader, int genreCount) {
+        String[][] outputFileInfo = new String[genreCount][3]; // Format: [Name, Genre, FileName]
+        for (int i=0; i < genreCount; i++) {
+            outputFileInfo[i] = reader.nextLine().split(commaRegex);
+            for (int j=0; j < outputFileInfo[i].length; j++) {
+                outputFileInfo[i][j] = outputFileInfo[i][j].trim();
+            }
+            outputFileInfo[i][2] = writeFileDirectory + outputFileInfo[i][2];   // Modify the path to the output files
+        }
+        return outputFileInfo;
+    }
+    /*  
+    _____           _     __ 
+    |  __ \         | |   /_ |
+    | |__) |_ _ _ __| |_   | |
+    |  ___/ _` | '__| __|  | |
+    | |  | (_| | |  | |_   | |
+    |_|   \__,_|_|   \__|  |_|
+    */                       
+                            
     private static void do_part1() {
         // Open file containing the name of the files that contain the books and their information
         Scanner inputFileNameReader = readFile(inputFilesPath);
@@ -170,14 +193,8 @@ public class Driver {
         }
         // Parse the file containing the genres and store them in an array (includes the BAD_SYN genre for the error file)
         int genreCount = Integer.parseInt(outputFileNameReader.nextLine());
-        String[][] outputFileInfo = new String[genreCount][3]; // Format: [Name, Genre, FileName]
-        for (int i=0; i < genreCount; i++) {
-            outputFileInfo[i] = outputFileNameReader.nextLine().split(commaRegex);
-            for (int j=0; j < outputFileInfo[i].length; j++) {
-                outputFileInfo[i][j] = outputFileInfo[i][j].trim();
-            }
-            outputFileInfo[i][2] = writeFileDirectory + outputFileInfo[i][2];   // Modify the path to the output files
-        }
+        
+        String[][] outputFileInfo = getOutputFilesInfo(outputFileNameReader, genreCount); // Format: [Name, Genre, FileName]
  
         // Create the output files that contain validated book entires
         OutputFile[] outputFiles = createOutputFiles(outputFileInfo);
@@ -299,8 +316,25 @@ public class Driver {
 
         return newList;
     }
+
+    private static void closeObjectOutputStream(OutputFile file) {
+        try {
+            file.binaryOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     
-    // TODO 1. Clean up the code (maybe make some functions for the repeated functionality / super nested blocks) 2. Validate that the information in the binary files are actually correct.
+    /*  
+    _____           _     ___  
+    |  __ \         | |   |__ \ 
+    | |__) |_ _ _ __| |_     ) |
+    |  ___/ _` | '__| __|   / / 
+    | |  | (_| | |  | |_   / /_ 
+    |_|   \__,_|_|   \__| |____|                         
+    */    
+
+    // TODO 2. Validate that the information in the binary files are actually correct.
     private static void do_part2() {
         // Open file containing the names of the output files
         Scanner outputFileNameReader = readFile(outputFilesPath);
@@ -310,15 +344,8 @@ public class Driver {
         }
         // Parse the file containing the outputFiles and store them in an array (excludes the BAD_SYN genre file)
         int genreCount = Integer.parseInt(outputFileNameReader.nextLine()) - 1; // the -1 removes the syntax error file from the list
-        String[][] outputFileInfo = new String[genreCount][3]; // Format: [Name, Genre, FileName]
-        for (int i=0; i < genreCount; i++) {
-            outputFileInfo[i] = outputFileNameReader.nextLine().split(commaRegex);
-            for (int j=0; j < outputFileInfo[i].length; j++) {
-                outputFileInfo[i][j] = outputFileInfo[i][j].trim();
-            }
-            outputFileInfo[i][2] = writeFileDirectory + outputFileInfo[i][2];   // Modify the path to the output files
-        }
-
+        String[][] outputFileInfo = getOutputFilesInfo(outputFileNameReader, genreCount); // Format: [Name, Genre, FileName]
+        
         // Create the outputFiles
         OutputFile[] outputFiles = createOutputFiles(outputFileInfo);
 
@@ -329,7 +356,7 @@ public class Driver {
         // Open the ObjectOutputStreams of the OutputFile objects
         for (OutputFile file:outputFiles) {
             if (file.genre.equals("BAD_SEM")) {continue;}
-            file.prepareBinaryOutputFile(".ser","/Binary/");
+            file.prepareBinaryOutputFile(".ser","/Binary/");    // Modifies the outputFiles' path to that of a bianry file in the Binary directory
             try {
                 file.binaryOutputStream = new ObjectOutputStream(new FileOutputStream(file.binaryPath));
             } catch (IOException e) {
@@ -337,7 +364,7 @@ public class Driver {
             }
         }
 
-        // Create outputStream for the semantic error file
+        // Open the outputStream for the semantic error file
         outputFiles[outputFiles.length - 1].outputStream = writeFile(outputFiles[outputFiles.length - 1].path, false);
 
         // Read each output file one by one and create Book objects after validating the semantics of their entries. If there is a semantic error, log the error to semantic_error_file.txt
@@ -345,6 +372,7 @@ public class Driver {
         for (OutputFile file:outputFiles) {
             if (file.genre.equals("BAD_SEM")) {continue;}   // Skip the error file because it dosen't contain any books
             Scanner read = readFile(file.path);
+            // Read through the entire currently opened file
             while (read.hasNextLine()) {
                 currentLine = read.nextLine();
                 // Validate book entry semantically before writing book entry
@@ -359,7 +387,7 @@ public class Driver {
                 }
                 // Create Book object and store it in the Book array of the OutputFile objects
                 String[] entry = currentLine.split(commaRegex);
-                file.addBook(new Book(entry[0], entry[1], Double.parseDouble(entry[2]), entry[3], Integer.parseInt(entry[5])));
+                file.addBook(new Book(entry[0], entry[1], Double.parseDouble(entry[2]), entry[3], Integer.parseInt(entry[5]))); // Book objects don't have Genre attributes, so skip it.
             }
             // Serialize the array of Books to their respective binary files
             try {
@@ -368,11 +396,7 @@ public class Driver {
                 e.printStackTrace();
             } finally {
                 // Close ObjectOutputStream for current file
-                try {
-                    file.binaryOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                closeObjectOutputStream(file);
             }
         }
 
@@ -380,15 +404,150 @@ public class Driver {
         outputFiles[outputFiles.length - 1].outputStream.close();
     }
     
+    /*  
+    _____           _     ____  
+    |  __ \         | |   |___ \ 
+    | |__) |_ _ _ __| |_    __) |
+    |  ___/ _` | '__| __|  |__ < 
+    | |  | (_| | |  | |_   ___) |
+    |_|   \__,_|_|   \__| |____/                        
+    */  
+
+    private static ObjectInputStream readBinaryFile(String path) {
+        ObjectInputStream input = null;
+        try {
+            input = new ObjectInputStream(new FileInputStream(path));
+        } catch(FileNotFoundException e) {
+            System.out.println("Couldn't find file: " + path + ". Terminating Program.");
+            System.exit(0);
+        } catch(IOException e) {
+            System.out.println("IO Exception for file: " + path + ". Terminating Program.");
+            System.exit(0);
+        }
+        return input;
+    }
+
+    public static void displayMenu(OutputFile currentFile) {
+        System.out.println("-----------------------------\n" 
+                          +"          Main Menu          \n"
+                          +"-----------------------------");
+        System.out.printf(" v  View the selected file: %s\n", currentFile.path);
+        System.out.println(" s  Select a file to view\n"
+                          +" x  Exit\n"
+                          +"-----------------------------");
+    }
+
+    private static String getUserInput() {
+        Scanner kb = new Scanner(System.in);
+        System.out.print("\nEnter Your Choice: ");
+        return kb.nextLine().toLowerCase();
+    }
+
+    private static int selectFile(OutputFile[] outputFiles, int currentFileIndex) {
+        System.out.println("-----------------------------\n" 
+                          +"        File Sub-Menu        \n"
+                          +"-----------------------------");
+        for (int i=0; i < outputFiles.length; i++) {
+            System.out.printf(" %-2d %-55s (%d records)%n", i+1, outputFiles[i].path, outputFiles[i].entryCount);
+            if (i == outputFiles.length - 1) {
+                System.out.println(" 9  Exit");
+            }
+        }
+        System.out.println("-----------------------------");
+
+        int newFileIndex = -1;
+        do {
+            try {
+                newFileIndex = Integer.parseInt(getUserInput()) - 1; // Index start at 0. The menu starts at 1. Therfore subtract 1 from the index
+                if (newFileIndex == outputFiles.length) {
+                    newFileIndex = currentFileIndex;   // User exit the selection, keep the file index the same
+                } else if (newFileIndex < 0 || newFileIndex > outputFiles.length) {
+                    System.out.print("The command you entered isn't in the list of valid commands. Please re-enter your command: ");
+                    newFileIndex = -1; // Set newFileIndex to the sentry value
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Your input isn't an integer. Try again.");
+            }
+        } while (newFileIndex == -1);
+    
+        return newFileIndex; 
+    }
+
+    private static void viewFile() {}
+
+    public static void runMenu(OutputFile[] outputFiles) {
+        String userInput;
+        int currentFileIndex = 0;
+        int currentBookIndex = 0;
+        System.out.println("Welcome Your Filtered Book Catalogue.\n\n"
+                         + "Please enter one of the commands below to navigate our systems:");
+        
+        displayMenu(outputFiles[currentFileIndex]);
+        do {
+            userInput = getUserInput();
+            
+            switch(userInput) {
+            case "v":
+                
+                break;
+            case "s":
+                currentFileIndex = selectFile(outputFiles, currentFileIndex);
+                displayMenu(outputFiles[currentFileIndex]);
+                break;
+            case "x":
+                break;
+            default:
+                System.out.print("That is not a valid command. Please re-enter a valid valid command from the list above: ");
+                break;
+            }
+
+        } while (!userInput.equals("x"));
+        
+        System.out.println("Thank you for using the Filtered Book Catalogue!");
+    }
+
+    private static void do_part3() {
+        // Open file containing the names of the output files
+        Scanner outputFileNameReader = readFile(outputFilesPath);
+        if (outputFileNameReader == null) {
+            System.out.println("The file containing the names of the genres does not exist. Terminating program.");
+            System.exit(0);
+        }
+
+        // Parse the file containing the outputFiles and store them in an array (excludes the BAD_SYN genre file)
+        int genreCount = Integer.parseInt(outputFileNameReader.nextLine()) - 1; // the -1 removes the syntax error file from the list
+        String[][] outputFileInfo = getOutputFilesInfo(outputFileNameReader, genreCount); // Format: [Name, Genre, FileName]
+
+        // Create the outputFiles
+        OutputFile[] outputFiles = createOutputFiles(outputFileInfo);
+
+        // Sequentially for each outputFile, convert the path to that of the binary file and open an ObjectInputStream to read the book data and store them in a Book array contained in the OutputFile object
+        for (OutputFile file:outputFiles) {
+            file.prepareBinaryOutputFile(".ser","/Binary/");
+            ObjectInputStream read = readBinaryFile(file.binaryPath);
+            // Read array of Book objects stored in the binary file. Only 1 read is requiered to get the entire array
+            try {
+                file.books = (Book[]) read.readObject(); 
+                // Get the enrtyCount for each outputFile by setting it to the length of the book array
+                file.entryCount = file.books.length;
+            } catch (IOException e) {
+                System.out.println("File: " + file.binaryPath + " encountered an IO Exception. Terminating");
+                System.exit(0);
+            } catch (ClassNotFoundException e) {
+                System.out.println("File: " + file.binaryPath + " dosen't contain an array of Book objects. Terminating");
+                System.exit(0);
+            }
+        }
+
+        runMenu(outputFiles);
+    }
+
     
     public static void main(String[] args) {
         do_part1(); // validating syntax, partition book records based on genre.
         
-        do_part2(); // validating semantics, read the genre files each into arrays of Book objects,
-                    // then serialize the arrays of Book objects each into binary files.
-        /*
-        do_part3(); // reading the binary files, deserialize the array objects in each file, and
-                    // then provide an interacive program to allow the user to navigate the arrays.
-        */
+        do_part2(); // validating semantics, read the genre files each into arrays of Book objects, then serialize the arrays of Book objects each into binary files.
+        
+        do_part3(); // reading the binary files, deserialize the array objects in each file, and then provide an interacive program to allow the user to navigate the arrays.
     }
 }
