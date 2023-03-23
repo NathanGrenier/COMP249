@@ -447,37 +447,37 @@ public class Driver {
     }
 
     public static void displayMenu(OutputFile currentFile) {
-        System.out.println("-----------------------------\n" 
-                          +"          Main Menu          \n"
-                          +"-----------------------------");
-        System.out.printf(" v  View the selected file: %s\n", currentFile.path);
+        System.out.println("---------------------------------------------------------------------------------------\n" 
+                          +"|                                       Main Menu                                     |\n"
+                          +"---------------------------------------------------------------------------------------");
+        System.out.printf(" v  View the selected file: %s\n", currentFile.binaryPath);
         System.out.println(" s  Select a file to view\n"
                           +" x  Exit\n"
-                          +"-----------------------------");
+                          +"---------------------------------------------------------------------------------------");
     }
 
-    private static String getUserInput() {
+    private static String getUserInput(String message) {
         Scanner kb = new Scanner(System.in);
-        System.out.print("\nEnter Your Choice: ");
-        return kb.nextLine().toLowerCase();
+        System.out.print("\n" + message);
+        return kb.nextLine();
     }
 
     private static int selectFile(OutputFile[] outputFiles, int currentFileIndex) {
-        System.out.println("-----------------------------\n" 
-                          +"        File Sub-Menu        \n"
-                          +"-----------------------------");
+        System.out.println("---------------------------------------------------------------------------------------\n" 
+                          +"|                                     File Sub-Menu                                   |\n"
+                          +"---------------------------------------------------------------------------------------");
         for (int i=0; i < outputFiles.length; i++) {
-            System.out.printf(" %-2d %-55s (%d records)%n", i+1, outputFiles[i].path, outputFiles[i].entryCount);
+            System.out.printf(" %-2d %-68s (%d records)%n", i+1, outputFiles[i].binaryPath, outputFiles[i].entryCount);
             if (i == outputFiles.length - 1) {
                 System.out.println(" 9  Exit");
             }
         }
-        System.out.println("-----------------------------");
+        System.out.println("---------------------------------------------------------------------------------------");
 
         int newFileIndex = -1;
         do {
             try {
-                newFileIndex = Integer.parseInt(getUserInput()) - 1; // Index start at 0. The menu starts at 1. Therfore subtract 1 from the index
+                newFileIndex = Integer.parseInt(getUserInput("Enter Your Choice: ")) - 1; // Index start at 0. The menu starts at 1. Therfore subtract 1 from the index
                 if (newFileIndex == outputFiles.length) {
                     newFileIndex = currentFileIndex;   // User exit the selection, keep the file index the same
                 } else if (newFileIndex < 0 || newFileIndex > outputFiles.length) {
@@ -492,33 +492,97 @@ public class Driver {
         return newFileIndex; 
     }
 
-    private static void viewFile() {
+    private static int validateNumber() {
+        boolean valid = false;
+        int n = 0;
+        while (!valid) {
+            try {
+                n = Integer.parseInt(getUserInput("Enter the number of entries you would like to see from the current entry (can be positive or negative). If 0, View Mode will exit: "));
+                valid = true;
+            } catch(NumberFormatException e) {
+                System.out.println("Your input isn't an integer. Try again.");
+            }
+        }
+        return n;
+    }
 
+    private static void viewFile(OutputFile[] OutputFile, int currentFileIndex, int currentBookIndex) {
+        System.out.printf("Viewing: %s (%d records)%n", OutputFile[currentFileIndex].binaryPath, OutputFile[currentFileIndex].entryCount);
+        
+        int n;
+        do {
+            System.out.print("\nCurrent index: " + currentBookIndex);
+
+            // Validate and get number of books user wants to see
+            n = validateNumber();
+    
+            // Evaluate and show the books to the user
+            if (n > 0) {
+                boolean outOfBounds = false;
+                for (int i=currentBookIndex; i <= currentBookIndex + (n - 1); i++) {
+                    if (outOfBounds) {break;}
+                    try {
+                        System.out.println("Index "+ i + ": " + OutputFile[currentFileIndex].books[i]);
+                        // When we are on the last iteration of the loop, update the currentBookIndex
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("EOF has been reached");
+                        outOfBounds = true;
+                        currentBookIndex = i - 1;   // Set current book to the one just before the error
+                    }
+                    if (i == currentBookIndex + (n - 1) && !outOfBounds) {
+                        currentBookIndex = i;
+                        break;
+                    }
+                }
+            } else if (n < 0) {
+                boolean outOfBounds = false;
+                for (int i=currentBookIndex; i >= currentBookIndex - (Math.abs(n) - 1); i--) {
+                    if (outOfBounds) {break;}
+                    try {
+                        System.out.println("Index "+ i + ": " + OutputFile[currentFileIndex].books[i]);
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("BOF has been reached");
+                        outOfBounds = true;
+                        currentBookIndex = i + 1; // Set current book to the one just before the error (+ because i--)
+                    }
+                    if (i == currentBookIndex - (Math.abs(n) - 1) && !outOfBounds) {
+                        currentBookIndex = i;
+                        break;
+                    }
+                }
+            }
+        } while(n !=0);
+        System.out.println("\nExiting View Mode.\n");
     }
 
     public static void runMenu(OutputFile[] outputFiles) {
         String userInput;
         int currentFileIndex = 0;
-        int currentBookIndex = 0;
-        System.out.println("Welcome Your Filtered Book Catalogue.\n\n"
+        int currentBookIndex;
+        System.out.println("\nWelcome Your Filtered Book Catalogue.\n"
                          + "Please enter one of the commands below to navigate our systems:");
         
         displayMenu(outputFiles[currentFileIndex]);
         do {
-            userInput = getUserInput();
+            userInput = getUserInput("Enter Your Choice: ").toLowerCase();
             
             switch(userInput) {
+            // View Selected file
             case "v":
-                viewFile();
+                currentBookIndex = 0; // When entering the book array, the initial index is always 0
+                viewFile(outputFiles, currentFileIndex, currentBookIndex);
+                displayMenu(outputFiles[currentFileIndex]);
                 break;
+            // Select a file to view
             case "s":
                 currentFileIndex = selectFile(outputFiles, currentFileIndex);
                 displayMenu(outputFiles[currentFileIndex]);
                 break;
+            // Exit Program
             case "x":
                 break;
             default:
-                System.out.print("That is not a valid command. Please re-enter a valid valid command from the list above: ");
+                System.out.print("That is not a valid command. Please re-enter a valid valid command from the list above.");
                 break;
             }
 

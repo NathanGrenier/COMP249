@@ -31,7 +31,7 @@ public class Book implements Serializable {
 
     @Override
     public String toString() {
-        return "Book{title=" + this.title + " authors=" + this.authors + " price=" + this.price + " isbn=" + this.isbn + " year=" + this.year + "}";
+        return "Book{title=" + this.title + ", authors=" + this.authors + ", price=" + this.price + ", isbn=" + this.isbn + ", year=" + this.year + "}";
     }
 
     public String getTitle() {
