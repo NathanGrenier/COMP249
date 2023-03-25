@@ -327,9 +327,9 @@ public class Driver {
      * @throws SemanticException
      */
     private static void validateIsbn10(String fileName, String currentLine) throws SemanticException {
-        int sum = 0;
+        long sum = 0;
         String [] record = currentLine.split(commaRegex);
-        String[] digits = record[3].split("");    // record[3] corresponds to the ISBN field
+        char[] digits = record[3].toCharArray();    // record[3] corresponds to the ISBN field
         // If the ISBN is 13 digits long, return from function as we don't want to validate it here
         if (digits.length == 13) {
             return;
@@ -343,7 +343,7 @@ public class Driver {
         // Validate that the isbn only contains numbers
         try {
             for (int i=0; i < digits.length; i++) {
-                sum += Integer.parseInt(digits[i]) * (10 - i); 
+                sum += Character.getNumericValue(digits[i]) * (10 - i); 
             }
         } catch (NumberFormatException e) {
             throw new BadIsbn10Exception(fileName, currentLine);
@@ -364,9 +364,9 @@ public class Driver {
      * @throws SemanticException
      */
     private static void validateIsbn13(String fileName, String currentLine) throws SemanticException {
-        int sum = 0;
+        long sum = 0;
         String [] record = currentLine.split(commaRegex);
-        String[] digits = record[3].split("");    // record[3] corresponds to the ISBN field
+        char[] digits = record[3].toCharArray();    // record[3] corresponds to the ISBN field
         // If the ISBN is 10 digits long, return from function as we don't want to validate it here
         if (digits.length == 10) {
             return;
@@ -380,7 +380,7 @@ public class Driver {
         // Validate that the isbn only contains numbers
         try {
             for (int i=0; i < digits.length; i++) {
-                sum += (i + 1) % 2 == 0 ? Integer.parseInt(digits[i]) * 3 : Integer.parseInt(digits[i]); 
+                sum += (i + 1) % 2 == 0 ? Character.getNumericValue(digits[i]) * 3 : Character.getNumericValue(digits[i]); 
             }
         } catch (NumberFormatException e) {
             throw new BadIsbn13Exception(fileName, currentLine);

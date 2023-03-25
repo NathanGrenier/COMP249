@@ -92,9 +92,7 @@ public class Driver {
         WW2Plane ww2Plane3 = new WW2Plane(15000, 10000, false);
         Ferry ferry1 = new Ferry();
 
-        Object[] objArr = { wheeledTransportation1, wheeledTransportation2, wheeledTransportation3, train1, train2,
-                tram1, tram2, metro1, monowheel1, aircraft1, aircraft2, aircraft3, ww2Plane1, ww2Plane2, ww2Plane3,
-                ferry1 };
+        Object[] objArr = { wheeledTransportation1, wheeledTransportation2, wheeledTransportation3, train1, train2, tram1, tram2, metro1, monowheel1, aircraft1, aircraft2, aircraft3, ww2Plane1, ww2Plane2, ww2Plane3,ferry1 };
 
         // Print object fields
         for (Object obj : objArr) {
