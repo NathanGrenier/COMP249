@@ -24,16 +24,7 @@ import java.io.PrintWriter;
 import java.util.Scanner;
 import java.util.Arrays;
 
-import Exceptions.BadIsbn10Exception;
-import Exceptions.BadIsbn13Exception;
-import Exceptions.BadPriceException;
-import Exceptions.BadYearException;
-import Exceptions.MissingFieldException;
-import Exceptions.SemanticException;
-import Exceptions.SyntaxException;
-import Exceptions.TooFewFieldsException;
-import Exceptions.TooManyFieldsException;
-import Exceptions.UnknownGenreException;
+import Exceptions.*;
 
 /**
  * Runs the Book Managment System. This:
@@ -341,12 +332,12 @@ public class Driver {
         }
         
         // Validate that the isbn only contains numbers
-        try {
-            for (int i=0; i < digits.length; i++) {
+        for (int i=0; i < digits.length; i++) {
+            if (Character.isDigit(digits[i])) {
                 sum += Character.getNumericValue(digits[i]) * (10 - i); 
+            } else {
+                throw new BadIsbn10Exception(fileName, currentLine);
             }
-        } catch (NumberFormatException e) {
-            throw new BadIsbn10Exception(fileName, currentLine);
         }
         
         // Validate that sum(10x1 + 9x2 + 8x3 + 7x4 + 6x5 + 5x6 + 4x7 + 3x8 + 2x9 + 1x10) is a multiple of 11
@@ -378,12 +369,12 @@ public class Driver {
         }
         
         // Validate that the isbn only contains numbers
-        try {
-            for (int i=0; i < digits.length; i++) {
+        for (int i=0; i < digits.length; i++) {
+            if (Character.isDigit(digits[i])) {
                 sum += (i + 1) % 2 == 0 ? Character.getNumericValue(digits[i]) * 3 : Character.getNumericValue(digits[i]); 
+            } else {
+                throw new BadIsbn13Exception(fileName, currentLine);
             }
-        } catch (NumberFormatException e) {
-            throw new BadIsbn13Exception(fileName, currentLine);
         }
         
         // Validate that sum(x1 +3x2 +x3 +3x4 +x5 +3x6 +x7 +3x8 +x9 +3x10 +x11 +3x12 +x13) is a multiple of 10
