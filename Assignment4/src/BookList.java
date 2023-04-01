@@ -9,21 +9,46 @@ public class BookList {
         this.head = null;
     }
 
-    public void addToStart(Book b) {
+    private Node getTail() {
         if (this.head == null) {
-            this.head = new Node(b, this.head);
-            // Make the last link point to to the head (This only updates the circulatiry of the list when the head node is null. To ensure circulatity, the last node must be updated everytime the head is.)
-            this.head.next = this.head;
+            System.out.println("Linked list has no tail.");
+            return null;
         } else {
-            this.head = new Node(b, this.head);
-            // Make list circular
-            Node node = this.head.next;
-            // Traverse list until last node (that points to the old head)
-            while (node.next != this.head.next) {
+            Node node = this.head.next; // If node == this.head then, node.next would always equal this.head.next. Therfore, skip the head
+            // If the node after the head is null, return the head as it is also the tail
+            if (node == null) {
+                return this.head;
+            }
+            // this.head.next refers to the last head (before the potential re-assignment of head by addToHead())
+            while (node.next != this.head && node.next != null && node.next != this.head.next) {
                 node = node.next;
             }
-            // Update the head
-            node.next = this.head;
+            return node;
+        }
+    }
+
+    private void pointTailToHead() {
+        Node tail = this.getTail();
+        if (tail != null) {
+            tail.next = this.head;
+        } else {
+            // Only happens if the linkedlist has no nodes
+            System.out.println("No tail exists.");
+        }
+    }
+
+    public void addToStart(Book b) {
+        this.head = new Node(b, this.head);
+        this.pointTailToHead();
+    }
+
+    public void addToEnd(Book b) {
+        Node tail = this.getTail();
+        // tail dosen't exist therefore head dosen't exist. So add to start
+        if (tail == null) {
+            this.addToStart(b);
+        } else {
+            tail.next = new Node(b, this.head);
         }
     }
 

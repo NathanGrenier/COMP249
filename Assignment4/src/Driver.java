@@ -37,7 +37,7 @@ public class Driver {
                     arrLst.add(currentBook);
                 } else {
                     // Add the correct entries to the circular linkedlist
-                    bkLst.addToStart(currentBook);
+                    bkLst.addToEnd(currentBook);
                 }
             }
         } catch (FileNotFoundException e) {
@@ -68,6 +68,5 @@ public class Driver {
     
     
         bkLst.displayContent();
-    
     }
 }
