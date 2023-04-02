@@ -46,6 +46,7 @@ public class BookList {
         Node tail = this.getTail();
         // tail dosen't exist therefore head dosen't exist. So add to start
         if (tail == null) {
+            System.out.println("Adding to start as tail dosen't exist.");
             this.addToStart(b);
         } else {
             tail.next = new Node(b, this.head);
@@ -55,14 +56,27 @@ public class BookList {
     public void storeRecordsByYear(int yr) {
         PrintWriter write = null;
         Node node = this.head;
+        boolean noMatchFound = true;
         try {
             if (node != null) {
-                write = new PrintWriter(new FileOutputStream(Driver.writeFolderPath + yr + ".txt"));
                 while (node.next != this.head) {
-
+                    if (node.b.year == yr) {
+                        if (noMatchFound) {
+                            write = new PrintWriter(new FileOutputStream(Driver.writeFolderPath + yr + ".txt"));
+                            noMatchFound = false;
+                        }
+                        write.println(node.b);
+                    }
+                    node = node.next;
+                }
+                // Evaluate the tail
+                if (noMatchFound && node.b.year == yr) {
+                    write = new PrintWriter(new FileOutputStream(Driver.writeFolderPath + yr + ".txt"));
+                    write.println(node.b);
+                } else if (noMatchFound == false) {
+                    write.println(node.b);
                 }
             }
-        
         } catch (FileNotFoundException e) {
             System.out.println("Couldn't create file " + yr + ".txt" );
         } finally {

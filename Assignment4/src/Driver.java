@@ -6,16 +6,12 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Driver {
-    public static final String readFolderPath = "Assignment4/Files/Read/";
-    public static final String writeFolderPath = "Assignment4/Files/Write/";
+    static final String writeFolderPath = "Assignment4/Files/Write/";
+    private static final String readFolderPath = "Assignment4/Files/Read/";
+    private static final String bookFileName = "Books.txt";
+    private static final String errFileName = "YearErr.txt";
     
-    public static void main(String[] args) {
-        ArrayList<Book> arrLst = new ArrayList<>();
-        BookList bkLst = new BookList();
-        String bookFileName = "Books.txt";
-        String errFileName = "YearErr.txt";
-
-        // Read incorrect Book records and store them in arrLst
+    private static void readAndStoreBooksInFile(ArrayList<Book> arrLst, BookList bkLst) {
         Scanner read = null;
         try {
             read = new Scanner(new FileInputStream(readFolderPath + bookFileName));
@@ -46,8 +42,9 @@ public class Driver {
         } finally {
             if (read != null) {read.close();}
         }
-        
-        // Store the Books in the error list into an error file
+    }
+
+    private static void writeBooksToErrorFile(ArrayList<Book> arrLst) {
         PrintWriter write = null;
         try {
             if (arrLst.size() > 0) {
@@ -65,8 +62,18 @@ public class Driver {
         } finally {
            if (write != null) {write.close();}
         }
-    
-    
+    }
+
+    public static void main(String[] args) {
+        ArrayList<Book> arrLst = new ArrayList<>();
+        BookList bkLst = new BookList();
+        
+        readAndStoreBooksInFile(arrLst, bkLst);
+
+        writeBooksToErrorFile(arrLst);
+
         bkLst.displayContent();
+
+        bkLst.storeRecordsByYear(1905);
     }
 }
