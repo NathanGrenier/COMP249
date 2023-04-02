@@ -74,6 +74,6 @@ public class Driver {
 
         bkLst.displayContent();
 
-        bkLst.storeRecordsByYear(1905);
+        bkLst.storeRecordsByYear(1);
     }
 }

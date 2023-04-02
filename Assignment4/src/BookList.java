@@ -14,15 +14,14 @@ public class BookList {
             System.out.println("Linked list has no tail.");
             return null;
         } else {
-            Node node = this.head.next; // If node == this.head then, node.next would always equal this.head.next. Therfore, skip the head
-            // If the node after the head is null, return the head as it is also the tail
-            if (node == null) {
-                return this.head;
+            Node node = this.head;
+            // If the node after the head is null, return the head
+            if (node.next == null) {
+                return node;
             }
-            // this.head.next refers to the last head (before the potential re-assignment of head by addToHead())
-            while (node.next != this.head && node.next != null && node.next != this.head.next) {
+            do {
                 node = node.next;
-            }
+            } while (node.next != this.head && node.next != null && node.next != this.head.next);
             return node;
         }
     }
@@ -53,35 +52,44 @@ public class BookList {
         }
     }
 
+    private PrintWriter openPrintWriter(String fileName, boolean append) {
+        try {
+            PrintWriter write = new PrintWriter(new FileOutputStream(fileName, append));
+            return write;
+        } catch (FileNotFoundException e) {
+            System.out.println("Couldn't create file " + fileName);
+            return null;
+        }
+    }
+
     public void storeRecordsByYear(int yr) {
         PrintWriter write = null;
         Node node = this.head;
-        boolean noMatchFound = true;
-        try {
-            if (node != null) {
-                while (node.next != this.head) {
-                    if (node.b.year == yr) {
-                        if (noMatchFound) {
-                            write = new PrintWriter(new FileOutputStream(Driver.writeFolderPath + yr + ".txt"));
-                            noMatchFound = false;
-                        }
-                        write.println(node.b);
-                    }
-                    node = node.next;
-                }
-                // Evaluate the tail
-                if (noMatchFound && node.b.year == yr) {
-                    write = new PrintWriter(new FileOutputStream(Driver.writeFolderPath + yr + ".txt"));
-                    write.println(node.b);
-                } else if (noMatchFound == false) {
-                    write.println(node.b);
-                }
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Couldn't create file " + yr + ".txt" );
-        } finally {
-            if (write != null) {write.close();}
+        boolean noMatches = true;
+        if (node == null) {
+            System.out.println("No nodes exist in the linked list");
+            return;
         }
+        
+        do {
+            if (node.b.year == yr) {
+                if (noMatches) {
+                    write = openPrintWriter(Driver.writeFolderPath + yr + ".txt", false);
+                    if (write == null) return;
+                    noMatches = false;
+                }
+                write.println(node.b);
+            }
+            node = node.next;
+        } while (node != this.head);
+        
+        if (!noMatches) {
+            write.close();
+        }
+    }
+ 
+    public boolean insertBefore(long isbn, Book b) {
+        return false;
     }
 
     public void displayContent() {
