@@ -94,11 +94,10 @@ public class BookList {
 
     public void displayContent() {
         Node node = this.head;
-        while (node.next != this.head) {
+        do {
             System.out.println(node.b + " ==>");
             node = node.next;
-        }
-        System.out.println(node.b + " ==>");
+        } while(node != this.head);
         System.out.println("===> head");
     }
 
