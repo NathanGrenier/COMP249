@@ -67,6 +67,7 @@ public class Driver {
     public static void main(String[] args) {
         ArrayList<Book> arrLst = new ArrayList<>();
         BookList bkLst = new BookList();
+        Book testBook = new Book("test", "test",-1,-1,"test",-1);
         
         readAndStoreBooksInFile(arrLst, bkLst);
 
@@ -75,5 +76,8 @@ public class Driver {
         bkLst.displayContent();
 
         bkLst.storeRecordsByYear(1);
+
+        System.out.println(bkLst.insertBefore(1557835659, testBook));
+        bkLst.displayContent();
     }
 }

@@ -36,6 +36,15 @@ public class BookList {
         }
     }
 
+    private boolean isEmpty() {
+        if (this.head == null) {
+            System.out.println("No nodes exist in the linked list");
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void addToStart(Book b) {
         this.head = new Node(b, this.head);
         this.pointTailToHead();
@@ -89,6 +98,19 @@ public class BookList {
     }
  
     public boolean insertBefore(long isbn, Book b) {
+        if (isEmpty()) return false;
+        Node node = this.head;
+        if (node.b.ISBN == isbn) {
+            addToStart(b);
+            return true;
+        }
+        do {
+            if (node.next.b.ISBN == isbn) {
+                node.next = new Node(b, node.next);
+                return true;
+            }
+            node = node.next;
+        } while (node != head);
         return false;
     }
 
