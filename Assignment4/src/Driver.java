@@ -75,9 +75,7 @@ public class Driver {
 
         bkLst.displayContent();
 
-        bkLst.storeRecordsByYear(1);
-
-        System.out.println(bkLst.insertBefore(1557835659, testBook));
+        System.out.println(bkLst.delConsecutiveRepeatedRecords());
         bkLst.displayContent();
     }
 }

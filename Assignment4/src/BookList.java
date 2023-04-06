@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
+import java.net.PortUnreachableException;
 
 public class BookList {
     Node head;
@@ -10,20 +11,18 @@ public class BookList {
     }
 
     private Node getTail() {
-        if (this.head == null) {
-            System.out.println("Linked list has no tail.");
+        if (isEmpty()) {
             return null;
-        } else {
-            Node node = this.head;
-            // If the node after the head is null, return the head
-            if (node.next == null) {
-                return node;
-            }
-            do {
-                node = node.next;
-            } while (node.next != this.head && node.next != null && node.next != this.head.next);
+        }
+        Node node = this.head;
+        // If the node after the head is null, return the head
+        if (node.next == null) {
             return node;
         }
+        do {
+            node = node.next;
+        } while (node.next != this.head && node.next != null && node.next != this.head.next);
+        return node;
     }
 
     private void pointTailToHead() {
@@ -75,10 +74,8 @@ public class BookList {
         PrintWriter write = null;
         Node node = this.head;
         boolean noMatches = true;
-        if (node == null) {
-            System.out.println("No nodes exist in the linked list");
-            return;
-        }
+        
+        if (isEmpty()) return;
         
         do {
             if (node.b.year == yr) {
@@ -114,13 +111,104 @@ public class BookList {
         return false;
     }
 
+    public boolean insertBetween(long isbn1, long isbn2, Book b) {
+        if (isEmpty()) return false;
+        Node node = this.head;
+        do {
+            if (node.b.ISBN == isbn1 && node.next.b.ISBN == isbn2) {
+                node.next = new Node(b, node.next);
+                return true;
+            }
+            node = node.next;
+        } while (node != this.head);
+        return false;
+    }
+
     public void displayContent() {
+        if (isEmpty()) return;
         Node node = this.head;
         do {
             System.out.println(node.b + " ==>");
             node = node.next;
         } while(node != this.head);
         System.out.println("===> head");
+    }
+
+    public boolean delConsecutiveRepeatedRecords() {
+        if (isEmpty()) return false;
+        Node node = this.head;
+        while (node.b.ISBN == node.next.b.ISBN) {
+            node.next = node.next.next;
+        }
+        do {
+            if (node.b.ISBN == node.next.b.ISBN) {
+                System.out.println("Removed: " + node.next.b);
+                node.next = node.next.next;
+                continue;
+            }
+            node = node.next;
+        } while (node.next != this.head);
+        if (node.b.ISBN == this.head.b.ISBN) {
+            System.out.println("Removed: " + node.next.b);
+            node.next = node.next.next;
+            this.head = this.head.next;
+            pointTailToHead();
+        }
+        return true;
+    }
+
+    public boolean delConsecutiveRepeatedRecordsAlternative() {
+        if (isEmpty()) return false;
+        Node node = this.head;
+        do {
+            if (node.b.ISBN == node.next.b.ISBN) {
+                System.out.println("Removed: " + node.next.b);
+                if (node.next == this.head) {
+                    this.head = this.head.next;
+                    pointTailToHead();
+                    continue;
+                }
+                node.next = node.next.next;
+                continue;
+            }
+            node = node.next;
+        } while (node != this.head || (this.head.b.ISBN == this.head.next.b.ISBN));
+        return true;
+    }
+
+    public BookList extractAuthList(String aut) {
+        BookList newList = null;
+        Node node = this.head;
+        do {
+            if (node.b.author.equals(aut)) {
+                if (newList == null) {
+                    newList = new BookList();
+                }
+                newList.addToEnd(node.b);
+            }
+            node = node.next;
+        } while(node != this.head);
+        if (newList == null) {
+            System.out.println("No books with the author: " + aut + " was found. Returned null");
+        }
+        return newList;
+    }
+
+    public boolean swap(long isbn1, long isbn2) {
+        Node node = this.head;
+        Node firstMatch = null;
+        Node secondMatch = null;
+        do {
+            if (node.b.ISBN == isbn1 && firstMatch == null) {
+                firstMatch = node;
+            }
+            if (node.b.ISBN == isbn2 && secondMatch == null) {
+                secondMatch = node;
+            }
+            node = node.next;
+        } while (node != this.head && (firstMatch == null || secondMatch == null));
+        if (firstMatch != null && secondMatch != null) {
+        }
     }
 
     private class Node {
