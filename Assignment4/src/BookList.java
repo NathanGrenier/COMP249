@@ -127,6 +127,7 @@ public class BookList {
     public void displayContent() {
         if (isEmpty()) return;
         Node node = this.head;
+        System.out.println("Here are the contents of the list\n==================================");
         do {
             System.out.println(node.b + " ==>");
             node = node.next;
@@ -198,6 +199,7 @@ public class BookList {
         Node node = this.head;
         Node firstMatch = null;
         Node secondMatch = null;
+        Book temp;
         do {
             if (node.b.ISBN == isbn1 && firstMatch == null) {
                 firstMatch = node;
@@ -208,7 +210,28 @@ public class BookList {
             node = node.next;
         } while (node != this.head && (firstMatch == null || secondMatch == null));
         if (firstMatch != null && secondMatch != null) {
+            temp = firstMatch.b;
+            firstMatch.b = secondMatch.b;
+            secondMatch.b = temp;
+            return true;
+        } else {
+            return false;
         }
+    }
+
+    public void commit() {
+        String outputPath = "Update_Books.txt";
+        PrintWriter write = openPrintWriter(Driver.writeFolderPath + outputPath, false);
+        if (write == null) {
+            System.out.println("Could not open file: " + outputPath);
+            return;
+        }
+        Node node = this.head;
+        do {
+            write.println(node.b);
+            node = node.next;
+        } while (node != this.head);
+        write.close();
     }
 
     private class Node {
