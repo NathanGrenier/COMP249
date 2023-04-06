@@ -1,7 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
-import java.net.PortUnreachableException;
 
 public class BookList {
     Node head;
@@ -82,6 +81,7 @@ public class BookList {
                 if (noMatches) {
                     write = openPrintWriter(Driver.writeFolderPath + yr + ".txt", false);
                     if (write == null) return;
+                    System.out.println("Created bookYear file at: " + Driver.writeFolderPath + yr + ".txt");
                     noMatches = false;
                 }
                 write.println(node.b);
@@ -91,6 +91,8 @@ public class BookList {
         
         if (!noMatches) {
             write.close();
+        } else {
+            System.out.println("There are no books that were writen in the year: " + yr);
         }
     }
  
@@ -108,6 +110,7 @@ public class BookList {
             }
             node = node.next;
         } while (node != head);
+        System.out.println("No book with ISBN=" + isbn + " was found.");
         return false;
     }
 
@@ -117,17 +120,18 @@ public class BookList {
         do {
             if (node.b.ISBN == isbn1 && node.next.b.ISBN == isbn2) {
                 node.next = new Node(b, node.next);
+                System.out.println("Succesfully inserted between books: " + isbn1 + " and " + isbn2);
                 return true;
             }
             node = node.next;
         } while (node != this.head);
+        System.out.println("Could not find consecutive books with isbns: " + isbn1 + " and " + isbn2);
         return false;
     }
 
     public void displayContent() {
         if (isEmpty()) return;
         Node node = this.head;
-        System.out.println("Here are the contents of the list\n==================================");
         do {
             System.out.println(node.b + " ==>");
             node = node.next;
@@ -213,8 +217,10 @@ public class BookList {
             temp = firstMatch.b;
             firstMatch.b = secondMatch.b;
             secondMatch.b = temp;
+            System.out.println("Sucesfully swaped books: " + isbn1 + " and " + isbn2);
             return true;
         } else {
+            System.out.println("Could not find books with isbn: " + isbn1 + " or " + isbn2 + " to swap.");
             return false;
         }
     }
@@ -232,6 +238,7 @@ public class BookList {
             node = node.next;
         } while (node != this.head);
         write.close();
+        System.out.println("Commited books in bookList to file: " + Driver.writeFolderPath + outputPath);
     }
 
     private class Node {

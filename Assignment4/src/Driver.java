@@ -77,17 +77,38 @@ public class Driver {
                          + "\t8) Tell me to STOP TALKING. Remember, if you do not commit, I will not!;");
     }
 
-    private static int getInput() {
+    private static int getIntegerInput() {
         Scanner in = new Scanner(System.in);
         int input;
-        System.out.print("Please enter a number from 1 to 8 corresponding to the action you want: ");
         if (in.hasNextInt()) {
             input = in.nextInt();
         } else {
-            System.out.println("You must enter and integer. Please try again.");
-            input = getInput();
+            System.out.print("You must enter a number. Please try again: ");
+            input = getIntegerInput();
         }
         return input;
+    }
+
+    private static String getStringInput() {
+        Scanner in = new Scanner(System.in);
+        return in.nextLine();
+    }
+
+    private static Book createBook() {
+        System.out.println("Enter the fields to create a new book object:");
+        System.out.print("Title: ");
+        String title = getStringInput();
+        System.out.print("Author: ");
+        String author = getStringInput();
+        System.out.print("Price: ");
+        int price = getIntegerInput();
+        System.out.print("ISBN: ");
+        long isbn = getIntegerInput();
+        System.out.print("Genre: ");
+        String genre = getStringInput();
+        System.out.print("Year of Creation: ");
+        int year = getIntegerInput();
+        return new Book(title, author, price, isbn, genre, year);
     }
 
     public static void main(String[] args) {
@@ -98,33 +119,63 @@ public class Driver {
 
         writeBooksToErrorFile(arrLst);
 
-        bkLst.displayContent();
-
+        Book newBook;
+        long isbn1;
+        long isbn2;
         int input = 0;
         do {
+            System.out.println("\nHere are the contents of the list\n==================================");
+            bkLst.displayContent();
             displayMenu();
-            input = getInput();
+            System.out.print("Please enter a number from 1 to 8 corresponding to the action you want: ");
+            input = getIntegerInput();
             switch (input){
                 case 1:
-                    
+                    System.out.print("Enter a year: ");
+                    int inputYear = getIntegerInput();
+                    bkLst.storeRecordsByYear(inputYear);
                     break;
                 
                 case 2:
+                    bkLst.delConsecutiveRepeatedRecords();
                     break;
                                 
                 case 3:
+                    System.out.print("Enter the name of the author you want an extracted list of: ");
+                    String author = getStringInput();
+                    BookList authorList = bkLst.extractAuthList(author);
+                    if (authorList != null) {
+                        System.out.println("\nHere are the contents of the author list for: " + author + "\n=============================================");
+                        authorList.displayContent();
+                    }
                     break;
 
                 case 4:
+                    newBook = createBook();
+                    System.out.print("Enter the isbn of the book you want to insert before: ");
+                    long isbn = getIntegerInput();
+                    bkLst.insertBefore(isbn, newBook);
                     break;
 
                 case 5:
+                    newBook = createBook();
+                    System.out.print("Enter the ISBN of the first book: ");
+                    isbn1 = getIntegerInput();
+                    System.out.print("Enter the ISBN of the second book: ");
+                    isbn2 = getIntegerInput();
+                    bkLst.insertBetween(isbn1, isbn2, newBook);
                     break;
                     
                 case 6:
+                    System.out.print("Enter the ISBN of the first book: ");
+                    isbn1 = getIntegerInput();
+                    System.out.print("Enter the ISBN of the second book: ");
+                    isbn2 = getIntegerInput();
+                    bkLst.swap(isbn1, isbn2);
                     break;
                     
                 case 7:
+                    bkLst.commit();
                     break;
 
                 case 8:
