@@ -1,7 +1,19 @@
+ // -----------------------------------------------------
+ // Written by: Nathan Grenier, 40250986
+ // COMP249
+ // Assignment #4
+ // Due: April 17, 2023
+ // -----------------------------------------------------
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+/**
+ * A circular linked list of book objects. 
+ * 
+ * @author Nathan Grenier
+ * @version 1.0
+ */
 public class BookList {
     Node head;
 
@@ -9,6 +21,11 @@ public class BookList {
         this.head = null;
     }
 
+    /**
+     * Returns the tail of the linked list. Works if the list is circular, non-circular or if the tail points to the node after the head.
+     * 
+     * @return Tail node of linked list.
+     */
     private Node getTail() {
         if (isEmpty()) {
             return null;
@@ -24,6 +41,10 @@ public class BookList {
         return node;
     }
 
+    /**
+     * Points the tail node to the head. Used to keep the linked list circular.
+     * 
+     */
     private void pointTailToHead() {
         Node tail = this.getTail();
         if (tail != null) {
@@ -34,6 +55,11 @@ public class BookList {
         }
     }
 
+    /**
+     * Checks to see if the linked list is empty or not.
+     * 
+     * @return false if linked list contains no nodes, true otherwise.
+     */
     private boolean isEmpty() {
         if (this.head == null) {
             System.out.println("No nodes exist in the linked list");
@@ -43,11 +69,21 @@ public class BookList {
         }
     }
 
+    /**
+     * Adds the passed book to the start of the linked list. This book becomes the new head and the tail is updated to point to it. 
+     * 
+     * @param b
+     */
     public void addToStart(Book b) {
         this.head = new Node(b, this.head);
         this.pointTailToHead();
     }
 
+    /**
+     * Creates a new node that contains the passed book to the end of the linked list. If the linked list has no tail (is empty), add the node to the start.
+     * 
+     * @param b
+     */
     public void addToEnd(Book b) {
         Node tail = this.getTail();
         // tail dosen't exist therefore head dosen't exist. So add to start
@@ -59,6 +95,13 @@ public class BookList {
         }
     }
 
+    /**
+     * Helper method that opens a printwriter at the path that was passed. 
+     * 
+     * @param fileName
+     * @param append
+     * @return PrintWriter at specified path
+     */
     private PrintWriter openPrintWriter(String fileName, boolean append) {
         try {
             PrintWriter write = new PrintWriter(new FileOutputStream(fileName, append));
@@ -69,6 +112,11 @@ public class BookList {
         }
     }
 
+    /**
+     * If there's a book writen in the year that was passed, a new output file named year.txt will be created and will contain all books in the linked list that were writen in that year.
+     * 
+     * @param yr
+     */
     public void storeRecordsByYear(int yr) {
         PrintWriter write = null;
         Node node = this.head;
@@ -96,6 +144,7 @@ public class BookList {
         }
     }
  
+    // When node to insert before is head, the new node is inserted as the tail
     public boolean insertBefore(long isbn, Book b) {
         if (isEmpty()) return false;
         Node node = this.head;
@@ -114,6 +163,14 @@ public class BookList {
         return false;
     }
 
+    /**
+     * Inserts a new node between 2 existing consecutive nodes that match the passed isbn values.
+     * 
+     * @param isbn1
+     * @param isbn2
+     * @param b
+     * @return boolean corresponding to if the node was inserted or not.
+     */
     public boolean insertBetween(long isbn1, long isbn2, Book b) {
         if (isEmpty()) return false;
         Node node = this.head;
@@ -129,6 +186,9 @@ public class BookList {
         return false;
     }
 
+    /**
+     * Displays the content of the linked list (Book objects) to the console.
+     */
     public void displayContent() {
         if (isEmpty()) return;
         Node node = this.head;
@@ -139,6 +199,11 @@ public class BookList {
         System.out.println("===> head");
     }
 
+    /**
+     * Deletes a node if the node before it has the same isbn value. Has 3 seperate sections for each of the following cases: 1) Head, 2) Middle, and 3) Tail. 
+     * 
+     * @return Always return true
+     */
     public boolean delConsecutiveRepeatedRecords() {
         if (isEmpty()) return false;
         Node node = this.head;
@@ -162,6 +227,11 @@ public class BookList {
         return true;
     }
 
+    /**
+     * Alternate version of delConsecutiveRepeatedRecords. This version has all of its logic in 1 do while loop.
+     * 
+     * @return Always returns true
+     */
     public boolean delConsecutiveRepeatedRecordsAlternative() {
         if (isEmpty()) return false;
         Node node = this.head;
@@ -181,6 +251,12 @@ public class BookList {
         return true;
     }
 
+    /**
+     * Creates a new linked list that contains a shallow copy of all nodes in the current linked list that were writen by the passed author. Only creates the new linkedList if the current list has at least 1 book writen by the passed author.
+     * 
+     * @param aut
+     * @return Booklist of books writen by the passed author
+     */
     public BookList extractAuthList(String aut) {
         BookList newList = null;
         Node node = this.head;
@@ -199,6 +275,13 @@ public class BookList {
         return newList;
     }
 
+    /**
+     * Swaps the value (Book object references) of the 2 nodes with the passed isbns.
+     * 
+     * @param isbn1
+     * @param isbn2
+     * @return true if a swap was performed.
+     */
     public boolean swap(long isbn1, long isbn2) {
         Node node = this.head;
         Node firstMatch = null;
@@ -225,6 +308,9 @@ public class BookList {
         }
     }
 
+    /**
+     * Writes all nodes to a output file named Update_books.txt.
+     */
     public void commit() {
         String outputPath = "Update_Books.txt";
         PrintWriter write = openPrintWriter(Driver.writeFolderPath + outputPath, false);
@@ -241,6 +327,9 @@ public class BookList {
         System.out.println("Commited books in bookList to file: " + Driver.writeFolderPath + outputPath);
     }
 
+    /**
+     * Private inner Node class. Nodes only contain a book and a pointer to the next node.
+     */
     private class Node {
         private Book b;
         private Node next;

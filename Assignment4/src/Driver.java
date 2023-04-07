@@ -1,3 +1,9 @@
+ // -----------------------------------------------------
+ // Written by: Nathan Grenier, 40250986
+ // COMP249
+ // Assignment #4
+ // Due: April 17, 2023
+ // -----------------------------------------------------
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -5,12 +11,35 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+ /**
+ * Runs the code that:
+ * 1) Reads the content of Books.txt and stores the incorrect entries in an arrayList. The correct entries are added to the linkedList of books.
+ * 2) Writes the incorrect entries in the arrayList to an error file named YearErr.txt.
+ * 3) Displays a menu to the user that allows them to perform certain actions. The actions are as follows:
+ *   - Store all books of a certain year into a new file
+ *   - Delete all consecutive records in the linkedList of books
+ *   - Create a new linked list that contains the records of a specific author
+ *   - Insert a new node before a node in the existing linked list with a specific ISBN
+ *   - Inser a new node inbetween 2 existing consecutive nodes corresponding to the passed ISBN values.
+ *   - Swap the data of 2 nodes in the linked list that correspond to the passed ISBN values
+ *   - Commit the records in the linked list to a file name Update_Books.txt
+ *   - Exit the program (does not auto commit)
+ * 
+ * @author Nathan Grenier
+ * @version 1.0 
+ */
 public class Driver {
     static final String writeFolderPath = "Assignment4/Files/Write/";
     private static final String readFolderPath = "Assignment4/Files/Read/";
     private static final String bookFileName = "Books.txt";
     private static final String errFileName = "YearErr.txt";
     
+    /**
+     * Reads the book entries in the specified file and stores the correct entries in a linkedList of Books. The incorrect entries are storred in an arrayList.
+     * 
+     * @param arrLst
+     * @param bkLst
+     */
     private static void readAndStoreBooksInFile(ArrayList<Book> arrLst, BookList bkLst) {
         Scanner read = null;
         try {
@@ -44,6 +73,11 @@ public class Driver {
         }
     }
 
+    /**
+     * Creates a new error file named YearErr.txt if there are elements in the arrayList of incorrect book entries. Writes all of these elements to the file.
+     * 
+     * @param arrLst
+     */
     private static void writeBooksToErrorFile(ArrayList<Book> arrLst) {
         PrintWriter write = null;
         try {
@@ -65,6 +99,9 @@ public class Driver {
         }
     }
 
+    /**
+     * Displays the command menu to the user through the console.
+     */
     private static void displayMenu() {
         System.out.println("\nTell me what you want to do:");
         System.out.println("\t1) Give me a year # and I would extract all records of that year and store them in a file for that year;\n"
@@ -77,6 +114,11 @@ public class Driver {
                          + "\t8) Tell me to STOP TALKING. Remember, if you do not commit, I will not!;");
     }
 
+    /**
+     * Prompts the user to enter an integer. Will re-prompt the user if they enter another data type.
+     * 
+     * @return integer value
+     */
     private static int getIntegerInput() {
         Scanner in = new Scanner(System.in);
         int input;
@@ -89,11 +131,19 @@ public class Driver {
         return input;
     }
 
+    /**
+     * @return String inputed through console
+     */
     private static String getStringInput() {
         Scanner in = new Scanner(System.in);
         return in.nextLine();
     }
 
+    /**
+     * Prompts the user to enter the attributes in order to create a new book object.
+     * 
+     * @return Book object with the user specified values.
+     */
     private static Book createBook() {
         System.out.println("Enter the fields to create a new book object:");
         System.out.print("Title: ");

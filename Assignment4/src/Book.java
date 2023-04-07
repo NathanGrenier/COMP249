@@ -1,3 +1,22 @@
+ // -----------------------------------------------------
+ // Written by: Nathan Grenier, 40250986
+ // COMP249
+ // Assignment #4
+ // Due: April 17, 2023
+ // -----------------------------------------------------
+
+ /**
+ * Each book contains:
+ * - Title
+ * - Author
+ * - Price
+ * - ISBN
+ * - Genre
+ * - Year of Creation
+ * 
+ * @author Nathan Grenier
+ * @version 1.0 
+ */
 public class Book {
     String title;
     String author;
