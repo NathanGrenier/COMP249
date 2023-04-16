@@ -144,12 +144,21 @@ public class BookList {
         }
     }
  
-    // When node to insert before is head, the new node is inserted as the tail
+    /**
+     * Insert a node containing the passed book before the book with the passed isbn. 
+     * If the node to insert before is the head, the node that is inserted becomes the new tail
+     * 
+     * @param isbn
+     * @param b
+     * @return true if succesful
+     */
     public boolean insertBefore(long isbn, Book b) {
         if (isEmpty()) return false;
         Node node = this.head;
+        // When node to insert before is head, the new node is inserted as the tail
         if (node.b.ISBN == isbn) {
-            addToStart(b);
+            Node tail = getTail();
+            tail.next = new Node(b, this.head);
             return true;
         }
         do {
